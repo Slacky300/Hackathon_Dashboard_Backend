@@ -38,6 +38,10 @@ const TeamSchema = mongoose.Schema({
             enum: [1,2,3,4,5],
             required: true
 
+        },
+        techStack: {
+            type: String,
+            required: true
         }
     }],
 

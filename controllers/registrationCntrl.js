@@ -6,7 +6,7 @@ const {sendVerification, generateToken} = require('../utils/email')
 
 const registration = asyncHandler(async (req, res) => {
     try{
-        const { usersToAdd, leaderEmail, name, problemPreference, techStack } = req.body;
+        const { usersToAdd, leaderEmail, name, problemPreference } = req.body;
 
     if (!Array.isArray(usersToAdd)) {
         res.status(400);
@@ -15,6 +15,10 @@ const registration = asyncHandler(async (req, res) => {
 
     if(usersToAdd.length > 4 ){
         return res.status(400).message("Not more than 4 members can be added");
+    }
+
+    if(name.length>30 || name.length<5){
+        return res.status(400).json({message: "Team name should be greater than 5 and less than 30"})
     }
 
     const existing_team_name = await Team.findOne({name: name});
@@ -34,7 +38,6 @@ const registration = asyncHandler(async (req, res) => {
     const newTeam = new Team({
         name,
         problemPreference,
-        techStack
     });
 
     newTeam.leader = leaderId;
