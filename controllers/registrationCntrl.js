@@ -17,8 +17,10 @@ const registration = asyncHandler(async (req, res) => {
         return res.status(400).message("Not more than 4 members can be added");
     }
 
-    
-
+    const existing_team_name = await Team.find({name: name});
+    if(existing_team_name){
+        res.status(405).json({message: "Team name already exists"})
+    }
     const insertedUsers = await User.insertMany(usersToAdd);
 
     const leaderId = await User.findOne({ email: leaderEmail });
