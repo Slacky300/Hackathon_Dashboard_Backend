@@ -1,0 +1,4 @@
+MONGO_URL=nothing
+PASSWORD=nothing
+EMAIL=nothing
+JWT_SECRET=Jnothing
