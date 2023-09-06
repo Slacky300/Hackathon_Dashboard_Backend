@@ -18,7 +18,9 @@ const registration = asyncHandler(async (req, res) => {
     }
 
     for(var i = 0; i<=usersToAdd.length-1;i++){
+        console.log(usersToAdd[i].phoneNo)
         if(usersToAdd[i].phoneNo == usersToAdd[i+1].phoneNo){
+
             return res.status(400).json({message: "Duplicate phone no. are not allowed"})
         }else if(usersToAdd[i].email == usersToAdd[i+1].email){
             return res.status(400).json({message: "Duplicate emails are not allowed"})
