@@ -50,7 +50,7 @@ const registration = asyncHandler(async (req, res) => {
     const leaderId = await User.findOne({ email: leaderEmail });
     leaderId.isTeamLeader = true;
     leaderId.inTeam = null; // Clear previous team association
-    await sendVerification(leaderId.email, verificationToken, leaderId.fname)
+    await sendVerification(leaderId.email, leaderId.fname)
     await leaderId.save();
 
     const newTeam = new Team({
