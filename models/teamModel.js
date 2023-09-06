@@ -59,7 +59,7 @@ const TeamSchema = mongoose.Schema({
     },
     techStack:{
         type: String,
-        required: [true, "Tech stack required"]
+        required: [false, "Tech stack required"]
         
     }
 },
