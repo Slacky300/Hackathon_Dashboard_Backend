@@ -17,6 +17,14 @@ const registration = asyncHandler(async (req, res) => {
         return res.status(400).message("Not more than 4 members can be added");
     }
 
+    for(var i = 0; i<=usersToAdd.length-1;i++){
+        if(usersToAdd[i].phoneNo == usersToAdd[i+1].phoneNo){
+            return res.status(400).json({message: "Duplicate phone no. are not allowed"})
+        }else if(usersToAdd[i].email == usersToAdd[i+1].email){
+            return res.status(400).json({message: "Duplicate emails are not allowed"})
+        }
+    }
+
     if(name.length>30 || name.length<5){
         return res.status(400).json({message: "Team name should be greater than 5 and less than 30"})
     }

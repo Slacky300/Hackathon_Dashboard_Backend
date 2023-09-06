@@ -22,7 +22,8 @@ const addUser = asyncHandler(async (req, res) => {
         dept,
         city,
         pincode,
-        college
+        college,
+        degree
 
     } = req.body;
 
@@ -30,8 +31,8 @@ const addUser = asyncHandler(async (req, res) => {
         //check the existing user
         existingUser = await User.find({ email: email });
         if (existingUser) {
-            res.status(400);
-            throw new Error("User already exists");
+            return res.status(400).json({message: "User already exists"});
+           
         }
 
        
@@ -47,7 +48,8 @@ const addUser = asyncHandler(async (req, res) => {
             food,
             city,
             pincode,
-            college
+            college,
+            degree
 
         });
 

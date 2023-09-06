@@ -56,6 +56,9 @@ const UserSchema = mongoose.Schema(
             type:String,
             required: true
         },
+        year:{
+            type:String
+        },
         inTeam:{
             type: mongoose.Types.ObjectId,
             ref: "Team"
@@ -67,6 +70,9 @@ const UserSchema = mongoose.Schema(
         verificationToken: {
             type: String,
             default: null
+        },
+        degree:{
+            type:String
         }
     },
     { timestamps: true }
