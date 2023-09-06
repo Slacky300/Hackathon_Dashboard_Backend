@@ -8,7 +8,7 @@ const generateToken = (email) => {
     return jwt.sign({ email }, process.env.JWT_SECRET, { expiresIn: '1d' })
 }
 
-const sendVerification = async (recipientEmail, verificationToken, username) => {
+const sendVerification = async (recipientEmail, username) => {
     try {
 
         const transporter = nodemailer.createTransport({
@@ -19,11 +19,11 @@ const sendVerification = async (recipientEmail, verificationToken, username) => 
             }
         })
 
-        const emailcontent = generateVerificationEmail(verificationToken, username);
+        const emailcontent = generateVerificationEmail(recipientEmail, username);
         await transporter.sendMail({
             from: process.env.EMAIL,
             to: recipientEmail,
-            subject: 'Email Verification',
+            subject: 'Registration Successful',
             html: emailcontent
         })
 

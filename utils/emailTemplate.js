@@ -1,4 +1,4 @@
-const generateVerificationEmail = (verificationToken, userFullName) => `
+const generateVerificationEmail = (email, userFullName) => `
 <!DOCTYPE html>
 <html>
 <head>
@@ -12,13 +12,11 @@ const generateVerificationEmail = (verificationToken, userFullName) => `
         <table border="0" cellspacing="0" cellpadding="0" style="max-width: 600px; width: 100%; margin: 20px auto; background-color: #ffffff; border-radius: 10px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);">
           <tr>
             <td style="padding: 20px;">
-              <h1 style="color: #333333;">Welcome to VCET Hackathon 23!</h1>
+              <h1 style="color: #333333;">You have successfully registered!</h1>
               <p style="color: #777777;">Hello ${userFullName},</p>
-              <p style="color: #777777;">Thank you for registering for VCET Hackathon 23. To complete your registration, please verify your email address by clicking the button below:</p>
-              <a href="https://hackathonbackend.onrender.comapi/v1/teams/verifyemail/${verificationToken}" style="display: inline-block; background-color: #007bff; color: #ffffff; text-align: center; padding: 10px 20px; text-decoration: none; border-radius: 5px;">Verify Email</a>
-              <p style="color: #777777;">If the button above does not work, you can also copy and paste the following link in your browser:</p>
-              <p style="color: #777777;">https://hackathonbackend.onrender.com/api/v1/teams/verifyemail/${verificationToken}</p>
-              <p style="color: #777777;">Please note that this verification link is valid for a limited time. If you did not register for the VCET Hackathon 23, you can ignore this email.</p>
+              <p style="color: #777777;">Thank you for registering for VCET Hackathon 23.</p>
+              
+          
               <p style="color: #777777;">If you have any questions or need assistance, please reply to this email.</p>
               <p style="color: #777777;">Best regards,<br>VCET Hackathon 23 Team</p>
             </td>
