@@ -21,6 +21,14 @@ const registration = asyncHandler(async (req, res) => {
         return res.status(400).json({message: "Team name should be greater than 5 and less than 30"})
     }
 
+    for(var i = 0; i< usersToAdd.length; i++){
+        const isExisting = await User.findOne({email: usersToAdd[i].email});
+        const isExisting2 = await User.findOne({phoneNo: usersToAdd[i].phoneNo});
+        if(isExisting || isExisting2){
+            return res.status(400).json({message: "Email or phoneNo. already exists"})
+        }
+    }
+
     const existing_team_name = await Team.findOne({name: name});
     if(existing_team_name){
         res.status(405).json({message: "Team name already exists"})
