@@ -41,7 +41,7 @@ const TeamSchema = mongoose.Schema({
         },
         techStack: {
             type: String,
-            required: true
+            required: false
         }
     }],
 
