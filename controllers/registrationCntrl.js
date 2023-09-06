@@ -24,11 +24,6 @@ const registration = asyncHandler(async (req, res) => {
     for(var i = 0; i< usersToAdd.length; i++){
         const isExisting = await User.findOne({email: usersToAdd[i].email});
         const isExisting2 = await User.findOne({phoneNo: usersToAdd[i].phoneNo});
-        if(usersToAdd[i].phoneNo.length < 10 || usersToAdd[i].phoneNo.length > 10){
-            return res.status(400).json({message: "Phone number should be equal to 10"})
-        }else if(usersToAdd[i].pincode.length < 6 || usersToAdd[i].pincode.length > 6){
-            return res.status(400).json({message: "Pin code should be equal to 6"})
-        }
         if(isExisting){
             return res.status(400).json({message: "Email already exists"})
         }else if(isExisting2){
