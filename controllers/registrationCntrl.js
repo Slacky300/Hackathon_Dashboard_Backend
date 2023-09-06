@@ -52,7 +52,8 @@ const registration = asyncHandler(async (req, res) => {
     const leaderId = await User.findOne({ email: leaderEmail });
     leaderId.isTeamLeader = true;
     leaderId.inTeam = null; // Clear previous team association
-    await sendVerification(leaderId.email, leaderId.fname)
+    const team_members = []
+   
     await leaderId.save();
 
     const newTeam = new Team({
@@ -62,6 +63,7 @@ const registration = asyncHandler(async (req, res) => {
 
     newTeam.leader = leaderId;
     await newTeam.save();
+   
 
     for (const user of insertedUsers) {
         newTeam.members.push(user);
@@ -85,9 +87,18 @@ const registration = asyncHandler(async (req, res) => {
         }
     }
 
+    for(const user of newTeam.members){
+        const memberTemp = await User.findById(user);
+        if(memberTemp.email !== null){
+            team_members.push(memberTemp.email)
+        }
+        
+    }
+    await sendVerification(leaderId.email, leaderId.fname)
+
     res.status(201).json({ users: insertedUsers, team: newTeam, message: "Please confirm your email address" });
     }catch(error){
-        res.status(400).json({"message": `Error occured: ${error}`})
+        res.status(400).json({"message": `Something went wrong!`})
     }
 });
 
