@@ -17,13 +17,21 @@ const registration = asyncHandler(async (req, res) => {
         return res.status(400).message("Not more than 4 members can be added");
     }
 
-    for(var i = 0; i<=usersToAdd.length-2;i++){
-        console.log(usersToAdd[i].phoneNo)
-        if(usersToAdd[i].phoneNo == usersToAdd[i+1].phoneNo){
-
-            return res.status(400).json({message: "Duplicate phone no. are not allowed"})
-        }else if(usersToAdd[i].email == usersToAdd[i+1].email){
-            return res.status(400).json({message: "Duplicate emails are not allowed"})
+    for (var i = 0; i <= usersToAdd.length - 2; i++) {
+        
+    
+        // Check for duplicate phone numbers
+        for (var j = i + 1; j < usersToAdd.length; j++) {
+            if (usersToAdd[i].phoneNo == usersToAdd[j].phoneNo) {
+                return res.status(400).json({ message: "Duplicate phone numbers are not allowed" });
+            }
+        }
+    
+        // Check for duplicate emails
+        for (var j = i + 1; j < usersToAdd.length; j++) {
+            if (usersToAdd[i].email == usersToAdd[j].email) {
+                return res.status(400).json({ message: "Duplicate emails are not allowed" });
+            }
         }
     }
 
@@ -31,15 +39,7 @@ const registration = asyncHandler(async (req, res) => {
         return res.status(400).json({message: "Team name should be greater than 5 and less than 30"})
     }
 
-    for(var i = 0; i< usersToAdd.length; i++){
-        const isExisting = await User.findOne({email: usersToAdd[i].email});
-        const isExisting2 = await User.findOne({phoneNo: usersToAdd[i].phoneNo});
-        if(isExisting){
-            return res.status(400).json({message: "Email already exists"})
-        }else if(isExisting2){
-            return res.status(400).json({message: "Phone no. already exists"})
-        }
-    }
+    
 
     const existing_team_name = await Team.findOne({name: name});
     if(existing_team_name){
