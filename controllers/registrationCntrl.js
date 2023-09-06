@@ -17,7 +17,7 @@ const registration = asyncHandler(async (req, res) => {
         return res.status(400).message("Not more than 4 members can be added");
     }
 
-    for(var i = 0; i<=usersToAdd.length-1;i++){
+    for(var i = 0; i<=usersToAdd.length-2;i++){
         console.log(usersToAdd[i].phoneNo)
         if(usersToAdd[i].phoneNo == usersToAdd[i+1].phoneNo){
 
