@@ -17,20 +17,22 @@ const registration = asyncHandler(async (req, res) => {
         return res.status(400).message("Not more than 4 members can be added");
     }
 
-    for (var i = 0; i <= usersToAdd.length - 2; i++) {
+    if(usersToAdd.length>=2){
+        for (var i = 0; i <= usersToAdd.length - 2; i++) {
         
     
-        // Check for duplicate phone numbers
-        for (var j = i + 1; j < usersToAdd.length; j++) {
-            if (usersToAdd[i].phoneNo == usersToAdd[j].phoneNo) {
-                return res.status(400).json({ message: "Duplicate phone numbers are not allowed" });
+            // Check for duplicate phone numbers
+            for (var j = i + 1; j < usersToAdd.length; j++) {
+                if (usersToAdd[i].phoneNo == usersToAdd[j].phoneNo) {
+                    return res.status(400).json({ message: "Duplicate phone numbers are not allowed" });
+                }
             }
-        }
-    
-        // Check for duplicate emails
-        for (var j = i + 1; j < usersToAdd.length; j++) {
-            if (usersToAdd[i].email == usersToAdd[j].email) {
-                return res.status(400).json({ message: "Duplicate emails are not allowed" });
+        
+            // Check for duplicate emails
+            for (var j = i + 1; j < usersToAdd.length; j++) {
+                if (usersToAdd[i].email == usersToAdd[j].email) {
+                    return res.status(400).json({ message: "Duplicate emails are not allowed" });
+                }
             }
         }
     }
