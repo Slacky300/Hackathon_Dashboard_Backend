@@ -122,7 +122,7 @@ const exportTeam = asyncHandler(async (req, res) => {
             
         });
 
-        const teamHeaders = ["Team Name", "Leader", "Member 2", "Member 3", "Member 4", "Climate Change Study", "User Interface Redesign", "Algorithm Optimization", "Short Story Challenge", "Math Puzzle"];
+        const teamHeaders = ["Team Name", "Leader", "Member 2", "Member 3", "Member 4", "Virtual Study Buddy Platform", "Telehealth Connect Platform", "Blockchain Certificate Verification System", "Scholarship Awareness Portal", "Interactive Language Learning Games"];
         const json2csvParser = new Parser({fields: teamHeaders });
 
         const csv = json2csvParser.parse(teams);

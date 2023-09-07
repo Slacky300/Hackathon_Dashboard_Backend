@@ -89,7 +89,6 @@ const userDataToCsv = asyncHandler(async (req, res) => {
                 "Team Name": teamName,
                 "Phone no.": phoneNo,
                 "Gender": gender,
-                "Food-Type": food,
                 "State": state,
                 "City": city,
                 "Pin Code": pincode,
@@ -97,7 +96,7 @@ const userDataToCsv = asyncHandler(async (req, res) => {
             });
         }
 
-        const userHeaders = ["First Name", "Last Name", "Email", "Team Name", "Phone no.", "Gender", "Food-Type", "State", "City", "Pin Code", "Department"];
+        const userHeaders = ["First Name", "Last Name", "Email", "Team Name", "Phone no.", "Gender", "State", "City", "Pin Code", "Department"];
         const json2csvParser = new Parser({ fields: userHeaders });
 
         const csv = json2csvParser.parse(users);
