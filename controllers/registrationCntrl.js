@@ -47,10 +47,26 @@ const registration = asyncHandler(async (req, res) => {
     if(existing_team_name){
         res.status(405).json({message: "Team name already exists"})
     }
-    const insertedUsers = await User.insertMany(usersToAdd);
+    
+    let k = 0;
+    for(const user of usersToAdd){
+        const user_exists = await User.findOne({email: usersToAdd[k].email});
+        if(user_exists){
+            return res.status(400).json({message: `${usersToAdd[k].email} - Email already exists`})
+        }
+        const phone_exists = await User.findOne({phoneNo: usersToAdd[k].phoneNo});
+        if(phone_exists){
+            return res.status(400).json({message: `${usersToAdd[k].phoneNo} - Phone number already exists`})
+        }
+        k++;
+    }
 
+    const insertedUsers = await User.insertMany(usersToAdd);
+    
     const leaderId = await User.findOne({ email: leaderEmail });
     leaderId.isTeamLeader = true;
+    
+    
     leaderId.inTeam = null; // Clear previous team association
     const team_members = []
    
@@ -96,8 +112,9 @@ const registration = asyncHandler(async (req, res) => {
     }
     await sendVerification(leaderId.email, leaderId.fname)
 
-    res.status(201).json({ users: insertedUsers, team: newTeam, message: "Please confirm your email address" });
+    res.status(201).json({ users: insertedUsers, team: newTeam, message: "We have sent a registration confirmation mail to your mail id" });
     }catch(error){
+        console.log(error)
         res.status(400).json({"message": `Something went wrong!`})
     }
 });
