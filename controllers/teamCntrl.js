@@ -84,15 +84,15 @@ const exportTeam = asyncHandler(async (req, res) => {
 
             for(var i =0;i<formattedProblems.length;i++){
 
-                if(formattedProblems[i].problemTitle === "Climate Change Study"){
+                if(formattedProblems[i].problemTitle === "Virtual Study Buddy Platform"){
                     problem0Abstract = `${formattedProblems[i].problemPreference} - ${formattedProblems[i].problemAbstract}`;
-                }else if(formattedProblems[i].problemTitle === "User Interface Redesign"){
+                }else if(formattedProblems[i].problemTitle === "Telehealth Connect Platform"){
                     problem1Abstract = `${formattedProblems[i].problemPreference} - ${formattedProblems[i].problemAbstract}`;
-                }else if(formattedProblems[i].problemTitle === "Algorithm Optimization"){
+                }else if(formattedProblems[i].problemTitle === "Blockchain Certificate Verification System"){
                     problem2Abstract = `${formattedProblems[i].problemPreference} - ${formattedProblems[i].problemAbstract}`;
-                }else if(formattedProblems[i].problemTitle === "Short Story Challenge"){
+                }else if(formattedProblems[i].problemTitle === "Scholarship Awareness Portal"){
                     problem3Abstract = `${formattedProblems[i].problemPreference} - ${formattedProblems[i].problemAbstract}`;
-                }else if(formattedProblems[i].problemTitle === "Math Puzzle"){
+                }else if(formattedProblems[i].problemTitle === "Interactive Language Learning Games"){
                     problem4Abstract = `${formattedProblems[i].problemPreference} - ${formattedProblems[i].problemAbstract}`;
                 }
             }
@@ -112,11 +112,11 @@ const exportTeam = asyncHandler(async (req, res) => {
                 "Member 2": member2,
                 "Member 3": member3,
                 "Member 4": member4,
-                "Climate Change Study": problem0Abstract,
-                "User Interface Redesign": problem1Abstract,
-                "Algorithm Optimization": problem2Abstract,
-                "Short Story Challenge": problem3Abstract,
-                "Math Puzzle": problem4Abstract
+                "Virtual Study Buddy Platform": problem0Abstract,
+                "Telehealth Connect Platform": problem1Abstract,
+                "Blockchain Certificate Verification System": problem2Abstract,
+                "Scholarship Awareness Portal": problem3Abstract,
+                "Interactive Language Learning Games": problem4Abstract
 
             });
             
