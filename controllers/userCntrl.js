@@ -7,7 +7,21 @@ const { Parser } = require('json2csv');
 
 const getAllUsers = asyncHandler(async (req, res) => {
     const registered_members = await User.find({});
-    res.status(200).json(registered_members);
+    let users = [];
+    for(const user of registered_members){
+        const team = await Team.findById(user.inTeam);
+        users.push({
+            'fname': user.fname,
+            'lname': user.lname,
+            'email': user.email,
+            'phoneNo': user.phoneNo,
+            'inTeam': team.name,
+            "college": user.college,
+            "city": user.city,
+            "degree": user.degree
+        })
+    }
+    res.status(200).json(users);
 });
 
 const addUser = asyncHandler(async (req, res) => {
