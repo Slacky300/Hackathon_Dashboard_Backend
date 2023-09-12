@@ -47,9 +47,6 @@ const UserSchema = mongoose.Schema(
         dept:{
             type:String,
         },
-        year:{
-            type:String
-        },
         inTeam:{
             type: mongoose.Types.ObjectId,
             ref: "Team"
