@@ -400,7 +400,7 @@ const generateTeamSelection = (teamName, teamLeader, teamMembers) => `
         <div class="mailContent">
           <div class="mainMessage">Successfully registered !</div>
           <div class="longMessage">
-            Hey ${teamleader},
+            Hey ${teamLeader}, 
             <br />
             You have successfully registered for VCET Hackathon 2023. The event
             will take place on 6th & 7th of October, 2023, at the premises of

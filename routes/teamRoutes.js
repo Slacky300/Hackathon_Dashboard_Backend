@@ -1,16 +1,21 @@
 const Router = require('express');
-const {teamJsonResp, addTeam, deleteTeam, updateTeam,shortListTeam, getSingleTeam,exportTeam, unShortListTeam} = require('../controllers/teamCntrl');
+const {teamJsonResp, addTeam, deleteTeam, getShortListedTeams,updateTeam,shortListTeam, removeTeamFromDb, removeAssignedProblem, getSingleTeam,exportTeam, unShortListTeam, assignProblem} = require('../controllers/teamCntrl');
 const {User} = require("../models/userModel")
 const {Team} = require("../models/teamModel")
 const {sendVerificationStatus} = require('../utils/email')
 const router = Router();
 
 router.route('/').get(teamJsonResp).post(addTeam);
+router.route('/get-selected-teams').get(getShortListedTeams);
 router.route('/csv').get(exportTeam)
 router.route('/:email').get(getSingleTeam)
 router.route('/:id').put(updateTeam).delete(deleteTeam);
 router.route('/select-teams').patch(shortListTeam);
 router.route('/unselect-teams').patch(unShortListTeam);
+router.route('/assign-problem').patch(assignProblem);
+router.route('/remove-assigned-problem').patch(removeAssignedProblem)
+router.route('/disqualify-team').patch(removeTeamFromDb)
+
 router.get('/verifyemail/:tokenId', async (req, res) => {
     const tokenId = req.params.tokenId;
     try {

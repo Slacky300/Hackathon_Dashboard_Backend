@@ -24,6 +24,8 @@ const getAllUsers = asyncHandler(async (req, res) => {
     res.status(200).json(users);
 });
 
+
+
 const addUser = asyncHandler(async (req, res) => {
 
     const {
@@ -192,18 +194,56 @@ async function getUsersByFoodPreference(req, res) {
   }
   
 
-  const getAllColleges = asyncHandler(async (req, res) => {
-    const colleges = await User.distinct(String('college'));
+const getAllColleges = asyncHandler(async (req, res) => {
+    console.log("hello-")
+    const colleges = await User.find().distinct('colleges');
+    console.log("hello")
     
-    if (colleges.length === 0) {
-      return res.status(404).json({ message: 'No colleges found.' });
-    }
+    // if (colleges.length === 0) {
+    //   return res.status(404).json({ message: 'No colleges found.' });
+    // }
     
-    res.status(200).json(colleges);
+    res.status(200).json({'colleges': colleges});
   });
 
+
+  const getUsersByCollege = asyncHandler(async(req,res) => {
+    console.log('hello')
+    const {college,city, inTeam} = req.body;
+    const filter = {}
+    let users = []
+    if(college){
+        filter.college = college
+    }
+    if(city){
+        filter.city = city
+    }
+    if(inTeam){
+        filter.inTeam = inTeam
+    }
+    const filtere_users = await User.find(filter)
+    for(const user of filtere_users){
+        const team = await Team.findById(user.inTeam);
+        users.push({
+            'fname': user.fname,
+            'lname': user.lname,
+            'email': user.email,
+            'phoneNo': user.phoneNo,
+            'inTeam': team.name,
+            "college": user.college,
+            "city": user.city,
+            "degree": user.degree
+        })
+    }
+    if(!college && !city && !inTeam){
+        getAllUsers(req,res)
+        return
+    }else{
+        return res.status(200).json(users)
+    }
+  })
   
-  
+ 
   
   
   
@@ -217,4 +257,4 @@ async function getUsersByFoodPreference(req, res) {
   
   
 
-module.exports = { getAllUsers, addUser, deleteUser, updateUser, getSingleUser, getAllColleges ,userDataToCsv, getUsersByFoodPreference}
+module.exports = { getAllUsers, getUsersByCollege, addUser, deleteUser, updateUser, getSingleUser, getAllColleges ,userDataToCsv, getUsersByFoodPreference}

@@ -61,6 +61,20 @@ const TeamSchema = mongoose.Schema({
         type: String,
         required: [false, "Tech stack required"]
         
+    },
+    selectedProblem: {
+        
+        id:{
+            type: mongoose.Types.ObjectId,
+            ref: "Problem"
+        },
+        name: {
+            type:String
+        },
+        abstract: {
+            type: String
+        }
+       
     }
 },
     { timestamps: true }

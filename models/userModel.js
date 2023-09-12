@@ -64,6 +64,9 @@ const UserSchema = mongoose.Schema(
         },
         degree:{
             type:String
+        },
+        year:{
+            type: String
         }
     },
     { timestamps: true }

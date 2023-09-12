@@ -33,7 +33,7 @@ const sendVerification = async (recipientEmail, username) => {
     }
 }
 
-const sendTeamSelection = async (recipientEmail, teamName, teamLeader, teamMembers) => {
+const sendTeamSelection = async (recipientEmail, teamName, teamLeader, teamMembers, problemTitle) => {
     try {
 
         const transporter = nodemailer.createTransport({
@@ -45,7 +45,7 @@ const sendTeamSelection = async (recipientEmail, teamName, teamLeader, teamMembe
 
         })
 
-        const emailcontent = generateTeamSelection(teamName, teamLeader, teamMembers);
+        const emailcontent = generateTeamSelection(teamName, teamLeader, teamMembers, problemTitle);
 
         await transporter.sendMail({
             from: process.env.EMAIL,

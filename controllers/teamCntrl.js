@@ -37,14 +37,16 @@ const getAllTeams = asyncHandler(async (req, res) => {
             return ans;
         });
         
-      
+        
+        
         return {
             _id: team._id,
             isSelected: team.isSelected,
-          name: team.name,
-          leader: team.leader.email,
-          members: membersEmails,
-          problems: problemInfo, 
+            name: team.name,
+            selectedProblem: team.selectedProblem.name,
+            leader: team.leader.email,
+            members: membersEmails,
+            problems: problemInfo, 
         };
       });
       
@@ -272,6 +274,8 @@ const deleteTeam = asyncHandler(async (req, res) => {
     }
 });
 const getSingleTeam = asyncHandler(async (req, res) => {
+   
+
     const { email: leaderemail } = req.params;
 
     try {
@@ -318,14 +322,20 @@ const shortListTeam = asyncHandler(async(req,res)=>{
             const team_members = []
             const existing_team = await Team.findById(team);
             const teamLeader = await User.findById(existing_team.leader);
-            for(const user of existing_team.members){
-                const memberTemp = await User.findById(user);
-                team_members.push(memberTemp.email)
+            console.log(existing_team.members.length)
+            if(existing_team.members){
+                for(const user of existing_team.members){
+                    
+                    const memberTemp = await User.findById(user);
+                    if(!memberTemp){
+                        res.status(404).json({message: "User not exists"})
+                    }
+                    team_members.push(memberTemp.email)
+                }
             }
             existing_team.isSelected = true;
             await existing_team.save();
-            console.log(team_members)
-            await sendTeamSelection(teamLeader.email,existing_team.name,teamLeader.fname,team_members)
+            await sendTeamSelection(teamLeader.email,existing_team.name,teamLeader.fname,team_members, existing_team.selectedProblem.name)
             console.log("email-sent")
 
         }
@@ -340,6 +350,7 @@ const shortListTeam = asyncHandler(async(req,res)=>{
 
 const unShortListTeam = asyncHandler(async(req,res)=>{
 
+    console.log("hello--")
     const {teams} = req.body
     
     try {
@@ -361,9 +372,81 @@ const unShortListTeam = asyncHandler(async(req,res)=>{
 })
 const getShortListedTeams = asyncHandler(async(req,res) => {
 
-    const shortListedTeams = await Team.find({isSelected: true});
-    res.status(200).json(shortListedTeams);
     
+    
+    const shortListedTeams = await Team.find({ isSelected: true }).populate({
+        path: 'leader',
+        select: '-_id email'
+      })
+      .populate({
+        path: 'members',
+        select: '-_id email'
+      })
+    if(!shortListedTeams){
+        res.status(404).json("No teams selected");
+        
+    }
+    
+    res.status(200).json(shortListedTeams);
+   
+    
+});
+
+const assignProblem = asyncHandler(async (req, res) => {
+    const { problemId, teamId } = req.body;
+  
+    try {
+      const problem = await Problem.findById(problemId);
+      if (!problem) {
+        return res.status(404).json({ message: "Problem with the given id not found" });
+      }
+  
+      const team = await Team.findById(teamId);
+      if (!team) {
+        return res.status(404).json({ message: "Team with the given id not found" });
+      }
+  
+      // Update the selectedProblem object
+      team.selectedProblem.id = problemId; // Store the problemId directly
+      team.selectedProblem.name = problem.title;
+  
+      // Find the matching preference and update abstract
+      for (const preference of team.problemPreference) {
+        if (preference.problems.toString() === problemId) {
+            team.selectedProblem.abstract = preference.abstract;
+        }
+      }
+  
+      // Save the updated team
+      await team.save();
+  
+      return res.status(200).json({ message: "Problem assigned successfully" });
+    } catch (error) {
+      console.error("Error assigning problem:", error);
+      return res.status(500).json({ message: "Internal Server Error" });
+    }
+  });
+
+  
+
+const removeAssignedProblem = asyncHandler(async(req,res) => {
+    const {teamId} = req.body
+    const team = await Team.findById(teamId);
+    team.selectedProblem.id = null 
+    team.selectedProblem.name = null
+    team.selectedProblem.abstract = null
+    await team.save()
+    res.status(200).json({message: "Problem removed successfully"})
 })
 
-module.exports = { teamJsonResp, addTeam, unShortListTeam, updateTeam, deleteTeam, getSingleTeam, exportTeam, shortListTeam};
+
+const removeTeamFromDb = asyncHandler(async(req,res) => {
+    const {teamId} = req.body
+    const team = await Team.findById(teamId);
+    team.isSelected = false;
+    await team.save()
+    res.status(200).json({message: "Team disqualified"});
+})
+
+module.exports = { teamJsonResp, addTeam, unShortListTeam, updateTeam, deleteTeam, getShortListedTeams,
+     getSingleTeam, exportTeam, shortListTeam, assignProblem, removeAssignedProblem, removeTeamFromDb};
