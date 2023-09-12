@@ -9,6 +9,7 @@ const getAllUsers = asyncHandler(async (req, res) => {
     const registered_members = await User.find({});
     let users = [];
     for(const user of registered_members){
+        console.log(user.year)
         const team = await Team.findById(user.inTeam);
         users.push({
             'fname': user.fname,
@@ -18,7 +19,8 @@ const getAllUsers = asyncHandler(async (req, res) => {
             'inTeam': team.name,
             "college": user.college,
             "city": user.city,
-            "degree": user.degree
+            "degree": user.degree,
+            "year": user.year
         })
     }
     res.status(200).json(users);
