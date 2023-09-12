@@ -66,7 +66,8 @@ const UserSchema = mongoose.Schema(
             type:String
         },
         year:{
-            type: String
+            type: String,
+            enum: ["FE", "SE", "TE", "BE"]
         }
     },
     { timestamps: true }
