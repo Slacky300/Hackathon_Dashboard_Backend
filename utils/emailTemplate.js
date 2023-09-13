@@ -5,17 +5,16 @@ const generateVerificationEmail = (user, teamLeader) => `
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <style>
-      @import url("https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
-
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500&display=swap');
       * {
         margin: 0;
         padding: 0;
         box-sizing: border-box;
-        font-family: "Poppins", sans-serif;
+        font-family: "Poppins","Arial";
         color: #fff;
         text-align: center;
       }
-
+      
       .mailTemplateMainContainer {
         margin: 5px auto;
         max-width: 768px;
@@ -77,15 +76,17 @@ const generateVerificationEmail = (user, teamLeader) => `
       }
 
       .mailTemplateMainContainer .mailDiv .mailContent .mainMessage {
-        background-color: #103825;
+        background-color: #34e8da75;
         width: 100%;
         margin: 0 auto;
         text-align: center;
         padding: 5px 20px;
         font-size: 24px;
         border-radius: 15px;
-        color: #2bca80;
-        letter-spacing: 0.4px;
+        color: rgb(255, 255, 255);
+        /* font-weight: 450; */
+        letter-spacing: 0.5px;
+        text-transform: capitalize;
       }
 
       img {
@@ -97,10 +98,13 @@ const generateVerificationEmail = (user, teamLeader) => `
 
       .mailTemplateMainContainer .mailDiv .mailContent .longMessage {
         padding: 20px 10px;
-        color: rgb(215, 215, 215);
+        /* color: rgb(215, 215, 215); */
         font-weight: 400;
         text-align: justify;
         font-size: 18px;
+        text-align: justify;
+        font-size: 15px;
+        font-weight: 500;
       }
 
       .mailTemplateMainContainer .mailDiv .mailContent .longMessage a {
@@ -116,7 +120,9 @@ const generateVerificationEmail = (user, teamLeader) => `
         color: #252525;
         padding: 10px;
       }
-
+      .imp{
+        color: rgb(134, 242, 248);
+      }
       @media only screen and (max-width: 425px) {
         .mailTemplateMainContainer {
           width: 95%;
@@ -131,23 +137,23 @@ const generateVerificationEmail = (user, teamLeader) => `
         }
 
         .mailTemplateMainContainer .mailDiv .hackathon {
-          font-size: 10px;
+          font-size: 8px;
         }
 
         .mailTemplateMainContainer .mailDiv .hackathon .department {
-          font-size: 15px;
+          font-size: 12px;
         }
 
         .mailTemplateMainContainer .mailDiv .mailContent .mainMessage {
-          font-size: 20px;
+          font-size: 12px;
         }
 
         .mailTemplateMainContainer .mailDiv .mailContent .longMessage {
-          font-size: 15px;
+          font-size: 10px;
         }
 
         .note {
-          font-size: 12px;
+          font-size: 8px;
         }
       }
     </style>
@@ -183,23 +189,29 @@ const generateVerificationEmail = (user, teamLeader) => `
         <div class="mailContent">
           <div class="mainMessage">Successfully registered !</div>
           <div class="longMessage">
-            Hey ${teamLeader},
+            Dear ${teamLeader},
+            <br /><br/>  
+            We hope this message finds you well. We are delighted to inform you that your registration for the VCET Hackathon: Unleash The Unreal has been successfully received. Thank you for expressing your interest in our event!
+            We have received an overwhelming response, and we are excited about the incredible projects that will come to life during this hackathon. Our team is dedicated to ensuring a fair and competitive selection process for all participants.
+            <br/>
+            <br/>
+            Here are the next steps in the process:
+            <br/>
+            <b class="imp">Abstract Review:</b> Our team will now begin the process of reviewing the abstracts submitted by all registered participants. The abstract is a critical part of the selection process, and it provides us with insight into your project idea and its potential impact.
+            <br/>
+            <b class="imp">Shortlisting Teams:</b> After carefully reviewing all abstracts, we will shortlist teams based on the quality and feasibility of the project ideas presented. Shortlisted teams will be notified via email.
+            <br/>
+            <b class="imp">Hackathon Details:</b> Once teams are finalized, we will share additional details about the hackathon, including the schedule, rules, and resources, to help you prepare for the event.
+            <br/><br/>
+            We encourage you to check your email regularly for updates and announcements regarding the hackathon. If you have any questions or require further assistance, please do not hesitate to reach out to us at <a href="mailto:vcet.hackathon@vcet.edu.in">vcet.hackathon@vcet.edu.in</a>.
+            
+            We appreciate your enthusiasm and commitment to making VCET Hackathon: Unleash The Unreal a success. We look forward to seeing your innovative ideas come to life during the event.
+
             <br />
-            You have successfully registered for VCET Hackathon 2023. The event
-            will take place on 6th & 7th of October, 2023, at the premises of
-            Vidyavardhini's College of Engineering & Technology. <br />
-            We are excited to have you on board for this thrilling 30-hour
-            hacking experience! VCET Hackathon is a platform to challenge your
-            problem-solving skills, ignite your creativity, and foster
-            innovation. Get ready to take on real-world problems and turn your
-            ideas into reality.
-            <br />
-            Teams will be shortlisted based on your preferences, and further
-            details will be provided soon. Stay tuned!
             <br />
             Visit our
             <a href="https://vcet-hackathon.web.app" target="_blank"
-              >official website</a
+              >official website-https://vcet-hackathon.web.app</a
             >
             for more details and updates.
           </div>
@@ -682,6 +694,6 @@ module.exports = {
     generateVerificationEmail,
     generateTeamSelection,
     generateTeamRejection,
-    verifiedTeam
+    verifiedTeam
 
 }
