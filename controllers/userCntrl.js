@@ -22,7 +22,7 @@ const getAllUsers = asyncHandler(async (req, res) => {
             "year": user.year
         })
     }
-    res.status(200).json(registered_members);
+    res.status(200).json(users);
 });
 
 
