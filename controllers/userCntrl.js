@@ -196,20 +196,27 @@ async function getUsersByFoodPreference(req, res) {
   
 
 const getAllColleges = asyncHandler(async (req, res) => {
-    console.log("hello-")
-    const colleges = await User.find().distinct('colleges');
-    console.log("hello")
+   
+    const colleges = await User.find().distinct('college');
+    const cities = await User.find().distinct('city');
+    const teamId = await User.find().distinct('inTeam');
+    const teamNames = []
+    for (const team of teamId) {
+        const teamDoc = await Team.findById(team);
+      
+        if (teamDoc) {
+          const { _id, name } = teamDoc;
+          const teamObject = { ["id"]: _id, ["name"]: name };
+          teamNames.push(teamObject);
+        }
+      }
     
-    // if (colleges.length === 0) {
-    //   return res.status(404).json({ message: 'No colleges found.' });
-    // }
-    
-    res.status(200).json({'colleges': colleges});
+    res.status(200).json({'colleges': colleges, 'cities': cities, 'teamNames': teamNames});
   });
 
 
   const getUsersByCollege = asyncHandler(async(req,res) => {
-    console.log('hello')
+
     const {college,city, inTeam} = req.body;
     const filter = {}
     let users = []
@@ -233,6 +240,7 @@ const getAllColleges = asyncHandler(async (req, res) => {
             'inTeam': team.name,
             "college": user.college,
             "city": user.city,
+            "year": user.year,
             "degree": user.degree
         })
     }
