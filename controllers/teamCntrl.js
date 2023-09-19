@@ -28,11 +28,13 @@ const getAllTeams = asyncHandler(async (req, res) => {
           const problemTitle = preference.problems.title;
           const problemAbstract = preference.abstract;
           const preferenceNumber = preference.preferenceNumber;
+          const problemTS = preference.techStack
         //   return `${problemTitle} - Preference: ${preferenceNumber} -Abstract: ${problemAbstract}`;
             const ans = {
                 problemTitle: problemTitle,
                 problemAbstract: problemAbstract,
-                problemPreference: preferenceNumber
+                problemPreference: preferenceNumber,
+                problemTechStack: problemTS
             }
             return ans;
         });
@@ -293,11 +295,14 @@ const getSingleTeam = asyncHandler(async (req, res) => {
             const problemTitle = preference.problems.title;
             const problemAbstract = preference.abstract;
             const preferenceNumber = preference.preferenceNumber;
+            const problemTS = preference.techStack;
 
             const ans = {
                 problemTitle: problemTitle,
                 problemAbstract: problemAbstract,
-                problemPreference: preferenceNumber
+                problemPreference: preferenceNumber,
+                problemTechStack: problemTS
+
             };
             return ans;
         });

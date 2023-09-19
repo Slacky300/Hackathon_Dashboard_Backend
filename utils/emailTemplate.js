@@ -410,27 +410,25 @@ const generateTeamSelection = (teamName, teamLeader, teamMembers) => `
           </div>
         </div>
         <div class="mailContent">
-          <div class="mainMessage">Successfully registered !</div>
+          <div class="mainMessage">Team Selection Announcement</div>
           <div class="longMessage">
-            Hey ${teamLeader}, 
+            Dear ${teamLeader},
             <br />
-            You have successfully registered for VCET Hackathon 2023. The event
-            will take place on 6th & 7th of October, 2023, at the premises of
-            Vidyavardhini's College of Engineering & Technology. <br />
-            We are excited to have you on board for this thrilling 30-hour
-            hacking experience! VCET Hackathon is a platform to challenge your
-            problem-solving skills, ignite your creativity, and foster
-            innovation. Get ready to take on real-world problems and turn your
-            ideas into reality.
+            We are thrilled to announce that your team has been selected to
+            participate in VCET Hackathon 2023. Congratulations to you and your
+            team members! The event will take place on 6th & 7th of October,
+            2023, at the premises of Vidyavardhini's College of Engineering &
+            Technology.
             <br />
-            Teams will be shortlisted based on your preferences, and further
-            details will be provided soon. Stay tuned!
+            Before the event, we kindly request that you and your team carefully
+            review the competition rules and guidelines. A thorough
+            understanding of the rules will ensure a smooth and enjoyable
+            experience.
             <br />
-            Visit our
+            For more details, please visit our
             <a href="https://vcet-hackathon.web.app" target="_blank"
               >official website</a
-            >
-            for more details and updates.
+            >.
           </div>
         </div>
       </div>
