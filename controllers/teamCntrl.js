@@ -2,10 +2,7 @@ const asyncHandler = require('express-async-handler');
 const { Team } = require('../models/teamModel');
 const {User} = require('../models/userModel');
 const {Problem} = require('../models/problemModel')
-// const { createObjectCsvWriter } = require('csv-writer');
-const {generateTeamSelection,generateTeamRejection} = require('../utils/emailTemplate')
 const {sendTeamSelection,sendTeamRejection} = require('../utils/email')
-
 const { Parser } = require('json2csv');
 
 const getAllTeams = asyncHandler(async (req, res) => {
@@ -49,6 +46,7 @@ const getAllTeams = asyncHandler(async (req, res) => {
             leader: team.leader.email,
             members: membersEmails,
             problems: problemInfo, 
+            emailSent: team.emailSent
         };
       });
       
@@ -318,63 +316,84 @@ const getSingleTeam = asyncHandler(async (req, res) => {
     }
 });
 
-const shortListTeam = asyncHandler(async(req,res)=>{
 
-    const {teams} = req.body
-    
+const shortListTeam = async (req, res) => {
+    const { teams } = req.body;
+  
     try {
-        for(const team of teams){
-            const team_members = []
-            const existing_team = await Team.findById(team);
-            const teamLeader = await User.findById(existing_team.leader);
-            console.log(existing_team.members.length)
-            if(existing_team.members){
-                for(const user of existing_team.members){
-                    
-                    const memberTemp = await User.findById(user);
-                    if(!memberTemp){
-                        res.status(404).json({message: "User not exists"})
-                    }
-                    team_members.push(memberTemp.email)
-                }
-            }
-            existing_team.isSelected = true;
-            await existing_team.save();
-            await sendTeamSelection(teamLeader.email,existing_team.name,teamLeader.fname,team_members, existing_team.selectedProblem.name)
-            console.log("email-sent")
+      // Use Promise.all to send emails asynchronously
+      await Promise.all(
+        teams.map(async (teamId) => {
+          const existingTeam = await Team.findById(teamId);
+          const teamLeader = await User.findById(existingTeam.leader);
+  
+          // Check if team members exist and retrieve their emails
+          const teamMembers = existingTeam.members
+            ? await User.find({ _id: { $in: existingTeam.members } }, 'email')
+            : [];
+  
+          if (!existingTeam) {
+            return res.status(404).json({ message: 'Team not exists' });
+          }
+  
+          existingTeam.isSelected = true;
+          existingTeam.emailSent = "Selected";
 
-        }
-
-        res.status(200).json({"message": "Teams selected successfully"});
+          await existingTeam.save();
+  
+          // Send the team selection email
+          await sendTeamSelection(
+            teamLeader.email,
+            existingTeam.name,
+            teamLeader.fname,
+            teamMembers.map((member) => member.email),
+            existingTeam.selectedProblem.name
+          );
+  
+          console.log(`Email sent to ${teamLeader.email}`);
+        })
+      );
+  
+      res.status(200).json({ message: 'Teams selected successfully' });
     } catch (error) {
-        res.status(500).json({ message: "Error getting team", error: error.message });
+      res.status(500).json({ message: 'Error selecting teams', error: error.message });
     }
-    
-})
+  };
 
-
-const unShortListTeam = asyncHandler(async(req,res)=>{
-
-    console.log("hello--")
-    const {teams} = req.body
-    
+const unShortListTeam = async (req, res) => {
+    const { teams } = req.body;
+  
     try {
-        for(const team of teams){
-
-            const existing_team = await Team.findById(team);
-            const teamLeader = await User.findById(existing_team.leader);
-            existing_team.isSelected = false;
-            await existing_team.save();
-            await sendTeamRejection(teamLeader.email,existing_team.name,teamLeader.fname)
-
-        }
-
-        res.status(200).json({message: "Teams unselected successfully"});
+      await Promise.all(
+        teams.map(async (teamId) => {
+          const existingTeam = await Team.findById(teamId);
+          const teamLeader = await User.findById(existingTeam.leader);
+  
+          if (!existingTeam) {
+            return res.status(404).json({ message: 'Team not exists' });
+          }
+  
+          existingTeam.isSelected = false;
+          existingTeam.emailSent = "Rejected";
+          await existingTeam.save();
+  
+          // Send the team rejection email
+          await sendTeamRejection(
+            teamLeader.email,
+            existingTeam.name,
+            teamLeader.fname
+          );
+  
+          console.log(`Rejection email sent to ${teamLeader.email}`);
+        })
+      );
+  
+      res.status(200).json({ message: 'Teams unselected successfully' });
     } catch (error) {
-        res.status(500).json({ message: "Error getting team", error: error.message });
+      res.status(500).json({ message: 'Error unselecting teams', error: error.message });
     }
-    
-})
+  };
+  
 const getShortListedTeams = asyncHandler(async(req,res) => {
 
     

@@ -75,6 +75,11 @@ const TeamSchema = mongoose.Schema({
             type: String
         }
        
+    },
+    emailSent:{
+        type: String,
+        enum: ["Rejection","Selection","Rejected","Selected", "null"],
+        default: "null"
     }
 },
     { timestamps: true }
