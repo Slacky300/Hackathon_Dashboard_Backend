@@ -1,15 +1,17 @@
 const Router = require('express');
-const {teamJsonResp, addTeam, deleteTeam, getShortListedTeams,updateTeam,shortListTeam, removeTeamFromDb, removeAssignedProblem, getSingleTeam,exportTeam, unShortListTeam, assignProblem} = require('../controllers/teamCntrl');
+const {teamJsonResp, addTeam, deleteTeam, getShortListedTeams, fetchAssignedProblems,updateTeam,shortListTeam, removeTeamFromDb, removeAssignedProblem, getSingleTeam,exportTeam, unShortListTeam, assignProblem, getCreatedAt, updatePayment} = require('../controllers/teamCntrl');
 const {User} = require("../models/userModel")
 const {Team} = require("../models/teamModel")
 const {sendVerificationStatus} = require('../utils/email')
 const router = Router();
 
 router.route('/').get(teamJsonResp).post(addTeam);
+router.route('/created-at').get(getCreatedAt);
 router.route('/get-selected-teams').get(getShortListedTeams);
 router.route('/csv').get(exportTeam)
 router.route('/:email').get(getSingleTeam)
 router.route('/:id').put(updateTeam).delete(deleteTeam);
+router.route('/update-payment').patch(updatePayment);
 router.route('/select-teams').patch(shortListTeam);
 router.route('/unselect-teams').patch(unShortListTeam);
 router.route('/assign-problem').patch(assignProblem);

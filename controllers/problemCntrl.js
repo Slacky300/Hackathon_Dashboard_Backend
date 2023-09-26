@@ -82,5 +82,47 @@ const deleteProblem = asyncHandler(async (req, res) => {
     }
 });
 
+const getPreference = asyncHandler(async (req, res) => {
+    const dataFrame = [];
+    const problem = await Problem.find({});
+    
+    for (const prob of problem) {
+        const dataset = []; // Initialize dataset for each problem
+        
+        for (const pref of prob.preferences) {
+            const team = await Team.findById(pref.team);
+            if (!team) {
+                continue;
+            }
+            // Reverse the preference score: 1 becomes 5, 2 becomes 4, and so on
+            
+            dataset.push({
+                'teamsTook': team.name,
+                'preferenceGiven': 6 - pref.preferenceOrder
+            });
+        }
+        
+        dataFrame.push({
+            'problemTitle': prob.title,
+            'data': dataset
+        });
+    }
+    
+    res.status(200).json(dataFrame);
+});
 
-module.exports = { getAllProblems, addProblem, updateProblem,deleteProblem,getSingleProblem };
+const fetchAssignedProblems = asyncHandler(async(req,res) => {
+    const idu = req.params.id;
+    
+    const team = await Team.findById(idu);
+    if(!team){
+        res.status(404).json({message: "Team not found"})
+    }
+    const data = {
+        "name": team.selectedProblem.name,
+        "abstract": team.selectedProblem.abstract
+    };
+    res.status(200).json(data);
+})
+
+module.exports = { getAllProblems, addProblem, updateProblem,deleteProblem,getSingleProblem,getPreference,fetchAssignedProblems};

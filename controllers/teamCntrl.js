@@ -42,6 +42,7 @@ const getAllTeams = asyncHandler(async (req, res) => {
             _id: team._id,
             isSelected: team.isSelected,
             name: team.name,
+            hasPaid: team.hasPaid,
             selectedProblem: team.selectedProblem.name,
             leader: team.leader.email,
             members: membersEmails,
@@ -443,6 +444,7 @@ const assignProblem = asyncHandler(async (req, res) => {
   
       // Save the updated team
       await team.save();
+      console.log(team.selectedProblem)
   
       return res.status(200).json({ message: "Problem assigned successfully" });
     } catch (error) {
@@ -472,5 +474,35 @@ const removeTeamFromDb = asyncHandler(async(req,res) => {
     res.status(200).json({message: "Team disqualified"});
 })
 
+const getCreatedAt = asyncHandler( async(req,res) => {
+    const data = []
+    const teams = await Team.find({});
+    for(const team of teams){
+        data.push({
+            'teamName': team.name,
+            'created_at': team.createdAt
+        })
+    }
+    res.status(200).json(data)
+})
+
+
+const updatePayment = asyncHandler ( async (req,res) => {
+
+    const {teamId} = req.body;
+    const team = await Team.findById(teamId);
+    if(team.hasPaid){
+        team.hasPaid = false;
+        await team.save()
+    }else{
+        team.hasPaid = true;
+        await team.save();
+    }
+    
+    res.status(200).json({message: "Payment Updated"})
+})
+
+
+
 module.exports = { teamJsonResp, addTeam, unShortListTeam, updateTeam, deleteTeam, getShortListedTeams,
-     getSingleTeam, exportTeam, shortListTeam, assignProblem, removeAssignedProblem, removeTeamFromDb};
+     getSingleTeam, exportTeam, shortListTeam, assignProblem, removeAssignedProblem, removeTeamFromDb,getCreatedAt,updatePayment};

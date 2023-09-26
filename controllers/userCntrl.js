@@ -11,11 +11,11 @@ const getAllUsers = asyncHandler(async (req, res) => {
     for(const user of registered_members){
         const team = await Team.findById(user.inTeam);
         users.push({
+            '_id': user._id,
             'fname': user.fname,
             'lname': user.lname,
             'email': user.email,
             'phoneNo': user.phoneNo,
-            'inTeam': team.name,
             "college": user.college,
             "city": user.city,
             "degree": user.degree,
