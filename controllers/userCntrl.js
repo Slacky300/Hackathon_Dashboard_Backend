@@ -18,6 +18,7 @@ const getAllUsers = asyncHandler(async (req, res) => {
             'phoneNo': user.phoneNo,
             "college": user.college,
             "city": user.city,
+            "gender": user.gender,
             "degree": user.degree,
             "year": user.year
         })
@@ -251,7 +252,10 @@ const getAllColleges = asyncHandler(async (req, res) => {
     }else{
         return res.status(200).json(users)
     }
-  })
+  });
+
+
+  
   
  
   

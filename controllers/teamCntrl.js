@@ -395,27 +395,40 @@ const unShortListTeam = async (req, res) => {
     }
   };
   
-const getShortListedTeams = asyncHandler(async(req,res) => {
-
-    
-    
+  const getShortListedTeams = asyncHandler(async (req, res) => {
     const shortListedTeams = await Team.find({ isSelected: true }).populate({
-        path: 'leader',
-        select: '-_id email'
-      })
-      .populate({
-        path: 'members',
-        select: '-_id email'
-      })
-    if(!shortListedTeams){
-        res.status(404).json("No teams selected");
-        
+      path: 'leader',
+      select: '-_id email'
+    }).populate({
+      path: 'members',
+      select: '-_id email gender'
+    });
+  
+    let maleCount = 0;
+    let femaleCount = 0;
+  
+    if (!shortListedTeams || shortListedTeams.length === 0) {
+      return res.status(404).json("No teams selected");
     }
-    
-    res.status(200).json(shortListedTeams);
-   
-    
-});
+  
+    // Loop through each team and its members to count males and females
+    shortListedTeams.forEach(team => {
+      team.members.forEach(member => {
+        if (member.gender === "male") {
+          maleCount++;
+        } else if (member.gender === "female") {
+          femaleCount++;
+        }
+      });
+    });
+  
+    res.status(200).json({
+      shortListedTeams,
+      maleCount,
+      femaleCount
+    });
+  });
+  
 
 const assignProblem = asyncHandler(async (req, res) => {
     const { problemId, teamId } = req.body;
