@@ -4,62 +4,67 @@ const {User} = require('../models/userModel');
 const {Problem} = require('../models/problemModel')
 const {sendTeamSelection,sendTeamRejection} = require('../utils/email')
 const { Parser } = require('json2csv');
-
 const getAllTeams = asyncHandler(async (req, res) => {
-    const teams = await Team.find({}).populate({
-        path: 'leader',
-        select: '-_id email'
-      })
-      .populate({
-        path: 'members',
-        select: '-_id email'
-      })
-      .populate({
-        path: 'problemPreference.problems',
-        select: '-_id title'
+  const teams = await Team.find({}).populate({
+      path: 'leader',
+      select: '-_id email'
+  })
+  .populate({
+      path: 'members',
+      select: '-_id email gender'
+  })
+  .populate({
+      path: 'problemPreference.problems',
+      select: '-_id title'
+  });
+
+  const formattedTeams = teams.map(team => {
+      const membersEmails = team.members.map(member => member.email);
+      let male = 0, female = 0;
+
+      team.members.forEach((member) => {
+          if (member.gender === "male") {
+              male++;
+          } else if (member.gender === "female") {
+              female++;
+          }
       });
 
-      const formattedTeams = teams.map(team => {
-        const membersEmails = team.members.map(member => member.email);
-        const problemInfo = team.problemPreference.map(preference => {
+      const genderRatio = `${male}:${female}`;
+
+      const problemInfo = team.problemPreference.map(preference => {
           const problemTitle = preference.problems.title;
           const problemAbstract = preference.abstract;
           const preferenceNumber = preference.preferenceNumber;
-          const problemTS = preference.techStack
-        //   return `${problemTitle} - Preference: ${preferenceNumber} -Abstract: ${problemAbstract}`;
-            const ans = {
-                problemTitle: problemTitle,
-                problemAbstract: problemAbstract,
-                problemPreference: preferenceNumber,
-                problemTechStack: problemTS
-            }
-            return ans;
-        });
-        
-        
-        
-        return {
-            _id: team._id,
-            isSelected: team.isSelected,
-            name: team.name,
-            hasPaid: team.hasPaid,
-            selectedProblem: team.selectedProblem.name,
-            leader: team.leader.email,
-            members: membersEmails,
-            problems: problemInfo, 
-            emailSent: team.emailSent
-        };
-      });
-      
-      return formattedTeams
+          const problemTS = preference.techStack;
 
-      
-      
-   
-      
-      
-   
+          const ans = {
+              problemTitle: problemTitle,
+              problemAbstract: problemAbstract,
+              problemPreference: preferenceNumber,
+              problemTechStack: problemTS
+          };
+
+          return ans;
+      });
+
+      return {
+          _id: team._id,
+          isSelected: team.isSelected,
+          name: team.name,
+          hasPaid: team.hasPaid,
+          selectedProblem: team.selectedProblem.name,
+          leader: team.leader.email,
+          genderRatio: genderRatio,
+          members: membersEmails,
+          problems: problemInfo,
+          emailSent: team.emailSent
+      };
+  });
+
+  return formattedTeams;
 });
+
 
 const teamJsonResp = asyncHandler(async(req,res) => {
     const teams = await getAllTeams();
@@ -404,6 +409,30 @@ const unShortListTeam = async (req, res) => {
       select: '-_id email gender'
     });
   
+    const formattedTeams = shortListedTeams.map((team) => {
+      const membersEmails = team.members.map(member => member.email);
+      let male = 0, female = 0;
+
+      team.members.forEach((member) => {
+            if (member.gender === "male") {
+                male++;
+            } else if (member.gender === "female") {
+                female++;
+            }
+        });
+
+      const genderRatio = `${male}:${female}`;
+        return {
+          _id: team._id,
+          name: team.name,
+          genderRatio: genderRatio,
+          leader: team.leader.email,
+          members: membersEmails,
+          hasPaid: team.hasPaid,
+          isSelected: team.isSelected
+
+        }
+    })
     let maleCount = 0;
     let femaleCount = 0;
   
@@ -423,7 +452,7 @@ const unShortListTeam = async (req, res) => {
     });
   
     res.status(200).json({
-      shortListedTeams,
+      formattedTeams,
       maleCount,
       femaleCount
     });
