@@ -504,5 +504,5 @@ const updatePayment = asyncHandler ( async (req,res) => {
 
 
 
-module.exports = { teamJsonResp, addTeam, unShortListTeam, updateTeam, deleteTeam, getShortListedTeams,
+module.exports = { teamJsonResp, getAllTeams, addTeam, unShortListTeam, updateTeam, deleteTeam, getShortListedTeams,
      getSingleTeam, exportTeam, shortListTeam, assignProblem, removeAssignedProblem, removeTeamFromDb,getCreatedAt,updatePayment};

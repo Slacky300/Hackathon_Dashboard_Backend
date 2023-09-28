@@ -95,7 +95,7 @@ const userDataToCsv = asyncHandler(async (req, res) => {
         const allUsers = await User.find({});
 
         for (const user of allUsers) {
-            const { fname, lname, email, phoneNo, gender, food, state, city, pincode, dept, inTeam } = user;
+            const { fname, lname, email, phoneNo, gender, food, state, city, pincode, dept, college, inTeam } = user;
             const team = await Team.findById({ _id: inTeam });
             const teamName = team ? team.name : '';
 
@@ -106,6 +106,7 @@ const userDataToCsv = asyncHandler(async (req, res) => {
                 "Team Name": teamName,
                 "Phone no.": phoneNo,
                 "Gender": gender,
+                "College": college,
                 "State": state,
                 "City": city,
                 "Pin Code": pincode,
@@ -113,7 +114,7 @@ const userDataToCsv = asyncHandler(async (req, res) => {
             });
         }
 
-        const userHeaders = ["First Name", "Last Name", "Email", "Team Name", "Phone no.", "Gender", "State", "City", "Pin Code", "Department"];
+        const userHeaders = ["First Name", "Last Name", "Email", "Team Name", "Phone no.", "College", "Gender", "State", "City", "Pin Code", "Department"];
         const json2csvParser = new Parser({ fields: userHeaders });
 
         const csv = json2csvParser.parse(users);

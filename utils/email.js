@@ -50,8 +50,16 @@ const sendTeamSelection = async (recipientEmail, teamName, teamLeader, teamMembe
         await transporter.sendMail({
             from: process.env.EMAIL,
             to: recipientEmail,
-            subject: 'Team Selection',
-            html: emailcontent
+            subject: 'Congratulations! Your team has been selected 🥳',
+            html: emailcontent,
+            attachments: [
+                {
+                    filename: 'UnderTakingForm.pdf', // Add the file extension here
+                    path: __dirname + '/udFrm.pdf', // Correct the file path
+                    cid: 'uniq-mailtrap.pdf'
+                }
+            ]
+        
         })
 
     }
@@ -78,7 +86,7 @@ const sendTeamRejection = async (recipientEmail, teamName, teamLeader) => {
         await transporter.sendMail({
             from: process.env.EMAIL,
             to: recipientEmail,
-            subject: 'Team Rejection',
+            subject: 'Your team has not been selected, better luck next time 🥺',
             html: emailcontent
         })
 

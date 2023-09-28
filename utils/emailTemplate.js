@@ -234,17 +234,15 @@ const generateTeamSelection = (teamName, teamLeader, teamMembers) => `
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <style>
-      @import url("https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
-
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500&display=swap');
       * {
         margin: 0;
         padding: 0;
         box-sizing: border-box;
-        font-family: "Poppins", sans-serif;
+        font-family: "Poppins","Arial";
         color: #fff;
-        text-align: center;
       }
-
+      
       .mailTemplateMainContainer {
         margin: 5px auto;
         max-width: 768px;
@@ -306,18 +304,20 @@ const generateTeamSelection = (teamName, teamLeader, teamMembers) => `
       }
 
       .mailTemplateMainContainer .mailDiv .mailContent .mainMessage {
-        background-color: #103825;
+        background-color: #34e8da75;
         width: 100%;
         margin: 0 auto;
         text-align: center;
         padding: 5px 20px;
         font-size: 24px;
         border-radius: 15px;
-        color: #2bca80;
-        letter-spacing: 0.4px;
+        color: rgb(255, 255, 255);
+        /* font-weight: 450; */
+        letter-spacing: 0.5px;
+        text-transform: capitalize;
       }
 
-      img {
+      .imgg {
         max-width: 100%;
         height: auto;
         display: block;
@@ -326,16 +326,23 @@ const generateTeamSelection = (teamName, teamLeader, teamMembers) => `
 
       .mailTemplateMainContainer .mailDiv .mailContent .longMessage {
         padding: 20px 10px;
-        color: rgb(215, 215, 215);
+        /* color: rgb(215, 215, 215); */
         font-weight: 400;
         text-align: justify;
         font-size: 18px;
+        text-align: justify;
+        font-size: 15px;
+        font-weight: 500;
       }
 
       .mailTemplateMainContainer .mailDiv .mailContent .longMessage a {
         text-decoration: none;
         color: rgb(134, 242, 248);
       }
+      .bold{
+        font-weight:500;
+        text-decoration: underline;
+        }
 
       .note {
         width: 100%;
@@ -345,10 +352,22 @@ const generateTeamSelection = (teamName, teamLeader, teamMembers) => `
         color: #252525;
         padding: 10px;
       }
-
-      @media only screen and (max-width: 425px) {
+      .upi{
+            width: 30%;
+        }
+    .FooterHeader{
+        font-size: 20px;
+        }
+      .imp{
+        color: rgb(134, 242, 248);
+      }
+      @media only screen and (max-width: 768px) {
         .mailTemplateMainContainer {
           width: 95%;
+        }
+
+        .upi{
+            width: 45%;
         }
 
         .mailTemplateMainContainer .mailDiv .collegeDetails .collegeName {
@@ -358,25 +377,32 @@ const generateTeamSelection = (teamName, teamLeader, teamMembers) => `
         .mailTemplateMainContainer .mailDiv .collegeDetails .collegeAddress {
           font-size: 10px;
         }
+        p{
+            font-size: 10px;
+        }
+
+        .FooterHeader{
+            font-size: 15px !important;
+        }
 
         .mailTemplateMainContainer .mailDiv .hackathon {
-          font-size: 10px;
+          font-size: 8px;
         }
 
         .mailTemplateMainContainer .mailDiv .hackathon .department {
-          font-size: 15px;
+          font-size: 12px;
         }
 
         .mailTemplateMainContainer .mailDiv .mailContent .mainMessage {
-          font-size: 20px;
+          font-size: 12px;
         }
 
         .mailTemplateMainContainer .mailDiv .mailContent .longMessage {
-          font-size: 15px;
+          font-size: 10px;
         }
 
         .note {
-          font-size: 12px;
+          font-size: 8px;
         }
       }
     </style>
@@ -390,6 +416,7 @@ const generateTeamSelection = (teamName, teamLeader, teamMembers) => `
             <img
               src="https://hackathonvcet.s3.amazonaws.com/CLG+LOGO.png"
               alt=""
+              class="imgg"
             />
           </div>
           <div class="collegeName">
@@ -405,39 +432,115 @@ const generateTeamSelection = (teamName, teamLeader, teamMembers) => `
           <div class="hackathonLogo">
             <img
               src="https://hackathonvcet.s3.amazonaws.com/hack+(1)+(1).png"
+              class="imgg"
+
               alt=""
             />
           </div>
         </div>
         <div class="mailContent">
-          <div class="mainMessage">Team Selection Announcement</div>
-          <div class="longMessage">
-            Dear ${teamLeader},
-            <br />
-            We are thrilled to announce that your team has been selected to
-            participate in VCET Hackathon 2023. Congratulations to you and your
-            team members! The event will take place on 6th & 7th of October,
-            2023, at the premises of Vidyavardhini's College of Engineering &
-            Technology.
-            <br />
-            Before the event, we kindly request that you and your team carefully
-            review the competition rules and guidelines. A thorough
-            understanding of the rules will ensure a smooth and enjoyable
-            experience.
-            <br />
-            For more details, please visit our
-            <a href="https://vcet-hackathon.web.app" target="_blank"
-              >official website</a
-            >.
-          </div>
-        </div>
-      </div>
+          <div class="mainMessage">Congratulations ! 🥳</div>
+          <div class="v-text-align" style="font-size: 14px; color: #ffffff; line-height: 140%; text-align: justify; word-wrap: break-word;"><br>
+    <p style="line-height: 140%; margin: 0px;">Dear ${teamLeader},</p>
+<p style="line-height: 140%; margin: 0px;">&nbsp;</p>
+<p style="line-height: 140%; margin: 0px;">We are pleased to inform you that your team, " ${teamName}," has been selected to participate in <b style="color: #08b2aa;" >VCET HACKATHON ’23</b>, scheduled to be held on <b style="color: #08b2aa;"> 6th and 7th October, 2023</b>. Congratulations on your team's selection!</p>
+<p style="line-height: 140%; margin: 0px;">&nbsp;</p>
+<p style="line-height: 140%; margin: 0px;"><b style="color: yellow; ">Here are the essential details and instructions for your participation :</b>
+
+<p style="line-height: 140%; margin: 0pxl" class="bold"><b>Payment Details :</b></p>
+<p style="line-height: 140%; margin: 0px; ;">- Registration Fee : <b style="color: #08b2aa;">Rs. 500 per person.</b></p>
+<p style="line-height: 140%; margin: 0px;">- Deadline for Payment :<b style="color: #08b2aa;"> 1st October, 2023 </b></p>
+<p style="line-height: 140%; margin: 0px;">- Payment Method: Online (NEFT/ UPI)</p>
+<p style="line-height: 140%; margin: 0px;">- Payment should be made in a single transaction per team.</p>
+<p style="line-height: 140%; margin: 0px;">- Write the Team Name in note while doing transaction.</p>
+<p style="line-height: 140%; margin: 0px;">&nbsp;</p>
+
+<table style="width:100%; padding: 1px; text-align: left;" >
+    <tr>
+      <td style="vertical-align: top; width: 50%;">
+        <p style="line-height: 140%; margin: 0px;text-align: left;" class="bold"><b>Payment Details for NEFT :</b></p>
+        <p style="line-height: 140%; margin: 0px;text-align: left;">- Name : ARCHANA BABAJI RAWOOL</p>
+        <p style="line-height: 140%; margin: 0px;text-align: left;">- Bank Name : BANK OF MAHARASHTRA</p>
+        <p style="line-height: 140%; margin: 0px;text-align: left;">- Account No. : 68012823017 </p>
+        <p style="line-height: 140%; margin: 0px;text-align: left;">- IFSC Code : MAHB0000299 </p>
+        <p style="line-height: 140%; margin: 0px;text-align: left;">- Branch : SANTACRUZ WEST</p>
+      </td>
+      <td style="vertical-align: top; width: 48%;">
+        <p style="line-height: 140%; margin: 0px;text-align: left" class="bold"><b>Payment Details for UPI :</b></p>
+        <p style="line-height: 140%; margin: 0px;text-align: left;">- UPI ID : rawoolaniruddha3@okhdfcbank</p>
+        <img src="https://hackathonvcet.s3.amazonaws.com/hack2.png" class="upi"  alt="">
+      </td>
+    </tr>
+  </table>
+
+<p style="line-height: 140%; margin: 0px;" class="bold"><br><b>Payment Confirmation :&nbsp;</b></p>
+<p style="line-height: 140%; margin: 0px;">Once you have completed the online payment, please take a screenshot of the transaction and upload it on the provided google form link :</p>
+<p style="line-height: 140%; margin: 0px;"><a style="color: yellow;" href="https://forms.gle/SfkBFnA7fBu5mUTR7">https://forms.gle/SfkBFnA7fBu5mUTR7</a></p>
+<p style="line-height: 140%; margin: 0px;" class="bold"><br><b>Confirmation and Important Dates :</b></p>
+<p style="line-height: 140%; margin: 0px;">- Confirmation of the selected abstract will be sent to you on 5th September, 2023.</p>
+<p style="line-height: 140%; margin: 0px;">- Reporting Time: 6:00 am, 6th October, 2023&nbsp;</p>
+<p style="line-height: 140%; margin: 0px;">&nbsp;</p>
+<p style="line-height: 140%; margin: 0px;" class="bold"><b>General Instructions :</b></p>
+<p style="line-height: 140%; margin: 0px;">- Please have your college ID card, transaction ID, bank details, and Identity Proof ready while attending the event.&nbsp;</p>
+<p style="line-height: 140%; margin: 0px;">-&nbsp;Ensure you have your own laptops and chargers.</p>
+<p style="line-height: 140%; margin: 0px;">- Make sure you fill the undertaking form attached to this email with your and&nbsp; your parent's signature and bring the hard copy on the event day(i.e 6th October) with you.&nbsp;</p>
+<p style="line-height: 140%; margin: 0px;">&nbsp;</p>
+<p style="line-height: 140%; margin: 0px;">For a detailed schedule and additional information, please visit our official website: <br><a style="color: yellow; text-decoration: none;" href="www.vcet-hackathon.web.app">www.vcet-hackathon.web.app</a></p>
+<p style="line-height: 140%; margin: 0px;">&nbsp;</p>
+<p style="line-height: 140%; margin: 0px;">For any inquiries or assistance, please feel free to reach out to us.</p>
+<p style="line-height: 140%; margin: 0px;">&nbsp;</p>
+<p style="line-height: 140%; margin: 0px;">Thank you for being a part of VCET HACKATHON ’23, and we look forward to your active participation in this exciting event.</p>
+<p style="line-height: 140%; margin: 0px;">&nbsp;</p>
+<div style="">
+<p style="line-height: 140%; margin: 0px; ">Best Regards,</p>
+<p style="line-height: 140%; margin: 0px;">Team Hackathon,</p>
+<p style="line-height: 140%; margin: 0px;">VCET-IT.</p>
+</div>
+  
+<br>
+      </td>
+    </tr>
+  </tbody>
+</table>
+</div>
+<div class="v-text-align" style="font-size: 14px; color: #000000; line-height: 140%; text-align: justify; word-wrap: break-word;">
+
+  <div class="FooterHeader" style=" line-height: 140%; text-align: center; margin: 0px;"><span style=" line-height: 28px;"><strong>For more details</strong></span></div>
+
+<p style="font-size: 14px; line-height: 140%; text-align: center; margin: 0px;">Contact - Ramesh Yadav : +91 9096377491 | Kashish bhanushali : +91 9561650242</p> <br>
+</div>
+
+  <!--[if (!mso)&(!IE)]><!--></div><!--<![endif]-->
+  </div>
+</div>
+
+<!--[if (mso)|(IE)]></td><![endif]-->
+      <!--[if (mso)|(IE)]></tr></table></td></tr></table><![endif]-->
     </div>
-    <div class="note">
-      This is a system-generated email; please do not reply to this.
-    </div>
+  </div>
+  </div>
+  
+    <!--[if gte mso 9]>
+      </v:textbox></v:rect>
+    </td>
+    </tr>
+    </table>
+    <![endif]-->
+    
+
+
+  
+  
+<br>
   </body>
+  <p style="text-align: center; margin-top: 20px; color: black !important">This is a system generated mail; Please do not reply to this email</p>
+
 </html>
+
+
+
+
+
 
 `;
 
@@ -520,15 +623,16 @@ const generateTeamRejection = (teamName, teamLeader) => `
       }
 
       .mailTemplateMainContainer .mailDiv .mailContent .mainMessage {
-        background-color: #d83006;
+        background-color: #c42c2c;
         width: 100%;
         margin: 0 auto;
         text-align: center;
         padding: 5px 20px;
-        font-size: 24px;
+        font-size: 16px;
         border-radius: 15px;
         color: #fff;
         letter-spacing: 0.4px;
+        white-space: nowrap !important;
       }
 
       img {
@@ -543,24 +647,27 @@ const generateTeamRejection = (teamName, teamLeader) => `
         color: rgb(215, 215, 215);
         font-weight: 400;
         text-align: justify;
-        font-size: 18px;
+        font-size: 15px;
       }
 
       .mailTemplateMainContainer .mailDiv .mailContent .longMessage a {
         text-decoration: none;
-        color: rgb(134, 242, 248);
+        color: yellow;
       }
 
       .note {
         width: 100%;
         text-align: center;
-        font-size: 15px;
+        font-size: 12px;
         font-weight: 300;
         color: #252525;
         padding: 10px;
       }
+      .FooterHeader{
+        font-size: 20px;
+        }
 
-      @media only screen and (max-width: 425px) {
+      @media only screen and (max-width: 768px) {
         .mailTemplateMainContainer {
           width: 95%;
         }
@@ -583,7 +690,10 @@ const generateTeamRejection = (teamName, teamLeader) => `
 
         .mailTemplateMainContainer .mailDiv .mailContent .mainMessage {
           font-size: 20px;
+          white-space: nowrap;
         }
+
+
 
         .mailTemplateMainContainer .mailDiv .mailContent .longMessage {
           font-size: 15px;
@@ -591,6 +701,10 @@ const generateTeamRejection = (teamName, teamLeader) => `
 
         .note {
           font-size: 12px;
+          color: black !important;
+        }
+        .FooterHeader{
+        font-size: 15px;
         }
       }
     </style>
@@ -623,75 +737,44 @@ const generateTeamRejection = (teamName, teamLeader) => `
           </div>
         </div>
         <div class="mailContent">
-          <div class="mainMessage">Team Rejection Notification</div>
+          <div class="mainMessage">Better Luck Next Time🥺</div>
           <div class="longMessage">
             Dear ${teamLeader},
             <br />
-            We appreciate your interest and application for VCET Hackathon 2023.
-            While your team's application was carefully reviewed, we regret to
-            inform you that it was not selected for participation this time.
+            We hope this email finds you well. We want to express our sincere appreciation for your team's interest and participation in the  VCET Hackathon '23 selection process. The enthusiasm and effort displayed by all the participating teams were truly commendable
             <br />
-            Please don't be disheartened. The competition was tough, and we
-            received many exceptional applications. We encourage you to continue
-            pursuing your passion for innovation and problem-solving. Your
-            determination and skills are valuable, and we hope to see you in
-            future events.
+            While your team wasn't selected this time, we sincerely encourage you to continue refining your skills and look forward to welcoming you to future events. Your dedication to coding and innovation is truly commendable, and we firmly believe in your tremendous potential.
             <br />
-            For more details , please visit our
+            Thank you for your interest in VCET HACKATHON 2023, and we look forward to seeing you in our future events.
+            <br>
+            Best Regards,
+            <br>
+            Team Hackathon,
+            <br>
+            VCET-IT
             <a href="https://vcet-hackathon.web.app" target="_blank"
               >official website</a
             >.
           </div>
         </div>
+        <div class="v-text-align" style="font-size: 14px; color: #000000; line-height: 140%; text-align: justify; word-wrap: break-word;">
+
+            <div class="FooterHeader" style=" line-height: 140%; text-align: center; margin: 0px;"><span style=" line-height: 28px;"><strong>For more details</strong></span></div>
+          
+          <p style="font-size: 14px; line-height: 140%; text-align: center; margin: 0px;">Contact - Ramesh Yadav : +91 9096377491 | Kashish bhanushali : +91 9561650242</p>
+          </div><br>
       </div>
-    </div>
-    <div class="note">
-      This is a system-generated email. Please do not reply to this.
+      
     </div>
   </body>
-</html>
-
-`;
-
-
-const verifiedTeam = (teamName, teamMembers) => `
-<!DOCTYPE html>
-<html>
-<head>
-  <meta charset="UTF-8">
-  <title>Team Verified</title>
-</head>
-<body style="font-family: Arial, sans-serif; margin: 0; padding: 0; background-color: #f5f5f5;">
-  <table width="100%" border="0" cellspacing="0" cellpadding="0">
-    <tr>
-      <td align="center">
-        <table border="0" cellspacing="0" cellpadding="0" style="max-width: 600px; width: 100%; margin: 20px auto; background-color: #ffffff; border-radius: 10px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);">
-          <tr>
-            <td style="padding: 20px;">
-              <h1 style="color: #333333;">Team Verified for vcet hackathon</h1>
-              <p style="color: #777777;">Hello Team ${teamName},</p>
-              <p style="color: #777777;">Some random text!</p>
-              <p style="color: #777777;">Your team members are:</p>
-              <ul style="color: #777777; list-style-type: disc; padding-left: 20px;">
-                ${teamMembers.map(member => `<li>${member}</li>`).join("")}
-              </ul>
-              <p style="color: #777777;">Please work together, brainstorm ideas, and get ready for an exciting hackathon experience!</p>
-              <p style="color: #777777;">If you have any questions or need assistance, please reply to this email.</p>
-              <p style="color: #777777;">Best regards,<br>VCET Hackathon 23 Team</p>
-            </td>
-          </tr>
-        </table>
-      </td>
-    </tr>
-  </table>
-</body>
-</html>
-`;
+  <div class="note">
+        This is a system-generated email. Please do not reply to this.
+  </div>
+</html>`
 
 module.exports = {
     generateVerificationEmail,
     generateTeamSelection,
     generateTeamRejection,
-    verifiedTeam
 
 }
