@@ -255,7 +255,36 @@ const getAllColleges = asyncHandler(async (req, res) => {
   });
 
 
+
+
+const getTeamMembDetails = asyncHandler(async(req,res) => {
+
+    const {id: teamID} = req.params;
+    const data = [];
+    const users = await User.find({inTeam: teamID});
+    for(const x of users){
+        const {fname,lname,email,phoneNo,isTeamLeader,
+                pincode, state, college,dept,gender,city} = x;
+        data.push({
+            fname: fname,
+            lname:lname,
+            email: email,
+            phoneNo: phoneNo,
+            city: city,
+            dept: dept,
+            state: state,
+            pincode: pincode,
+            isTeamLeader: isTeamLeader,
+            college: college,
+            gender: gender
+        })
+    }
   
+
+    res.status(200).json(data);
+
+
+})
   
  
   
@@ -271,4 +300,4 @@ const getAllColleges = asyncHandler(async (req, res) => {
   
   
 
-module.exports = { getAllUsers, getUsersByCollege, addUser, deleteUser, updateUser, getSingleUser, getAllColleges ,userDataToCsv, getUsersByFoodPreference}
+module.exports = { getAllUsers, getTeamMembDetails,getUsersByCollege, addUser, deleteUser, updateUser, getSingleUser, getAllColleges ,userDataToCsv, getUsersByFoodPreference}
