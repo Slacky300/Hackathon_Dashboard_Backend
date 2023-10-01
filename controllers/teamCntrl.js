@@ -421,6 +421,9 @@ const unShortListTeam = async (req, res) => {
             }
         });
 
+    
+     
+
       const genderRatio = `${male}:${female}`;
         return {
           _id: team._id,
@@ -435,6 +438,7 @@ const unShortListTeam = async (req, res) => {
     })
     let maleCount = 0;
     let femaleCount = 0;
+    let paidTeams = 0;
   
     if (!shortListedTeams || shortListedTeams.length === 0) {
       return res.status(404).json("No teams selected");
@@ -449,15 +453,111 @@ const unShortListTeam = async (req, res) => {
           femaleCount++;
         }
       });
+      if(team.hasPaid){
+        paidTeams++;
+      }
     });
+
+    formattedTeams.sort((a, b) => {
+        if (a.hasPaid === true && b.hasPaid === false) {
+          return -1; // a comes before b
+        } else if (a.hasPaid === false && b.hasPaid === true) {
+          return 1; // b comes before a
+        } else {
+          return 0; // maintain the existing order
+        }
+      });
   
     res.status(200).json({
       formattedTeams,
       maleCount,
-      femaleCount
+      femaleCount,
+      paidTeams
     });
   });
   
+
+
+  const getTeamsPaid = asyncHandler(async(req,res) => {
+    const teams = await Team.find({hasPaid: true}).populate({
+        path: 'leader',
+        select: '-_id email'
+      }).populate({
+        path: 'members',
+        select: '-_id email gender'
+      });
+
+      const formattedTeams = teams.map((team) => {
+        const membersEmails = team.members.map(member => member.email);
+        let male = 0, female = 0;
+  
+        team.members.forEach((member) => {
+              if (member.gender === "male") {
+                  male++;
+              } else if (member.gender === "female") {
+                  female++;
+              }
+          });
+  
+      
+       
+  
+        const genderRatio = `${male}:${female}`;
+          return {
+            _id: team._id,
+            name: team.name,
+            genderRatio: genderRatio,
+            leader: team.leader.email,
+            members: membersEmails,
+            hasPaid: team.hasPaid,
+            isSelected: team.isSelected
+  
+          }
+      })
+      res.status(200).json({
+        formattedTeams});
+  })
+
+  const getTeamsUnpaid = asyncHandler(async(req,res) => {
+    const teams = await Team.find({hasPaid: false}).populate({
+        path: 'leader',
+        select: '-_id email'
+      }).populate({
+        path: 'members',
+        select: '-_id email gender'
+      });
+
+      const formattedTeams = teams.map((team) => {
+        const membersEmails = team.members.map(member => member.email);
+        let male = 0, female = 0;
+  
+        team.members.forEach((member) => {
+              if (member.gender === "male") {
+                  male++;
+              } else if (member.gender === "female") {
+                  female++;
+              }
+          });
+  
+      
+       
+  
+        const genderRatio = `${male}:${female}`;
+          return {
+            _id: team._id,
+            name: team.name,
+            genderRatio: genderRatio,
+            leader: team.leader.email,
+            members: membersEmails,
+            hasPaid: team.hasPaid,
+            isSelected: team.isSelected
+  
+          }
+      })
+      res.status(200).json({
+        formattedTeams});
+  })
+
 
 const assignProblem = asyncHandler(async (req, res) => {
     const { problemId, teamId } = req.body;
@@ -547,4 +647,4 @@ const updatePayment = asyncHandler ( async (req,res) => {
 
 
 module.exports = { teamJsonResp, getAllTeams, addTeam, unShortListTeam, updateTeam, deleteTeam, getShortListedTeams,
-     getSingleTeam, exportTeam, shortListTeam, assignProblem, removeAssignedProblem, removeTeamFromDb,getCreatedAt,updatePayment};
+     getSingleTeam, exportTeam, shortListTeam, assignProblem, getTeamsPaid, getTeamsUnpaid, removeAssignedProblem, removeTeamFromDb,getCreatedAt,updatePayment};
