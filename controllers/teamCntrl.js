@@ -4,6 +4,13 @@ const {User} = require('../models/userModel');
 const {Problem} = require('../models/problemModel')
 const {sendTeamSelection,sendTeamRejection} = require('../utils/email')
 const { Parser } = require('json2csv');
+
+const getThadomal = async(req,res) => {
+
+  const data = await Team.findById(req.params.id).populate('members');
+  res.status(200).json(data)
+}
+
 const getAllTeams = asyncHandler(async (req, res) => {
   const teams = await Team.find({}).populate({
       path: 'leader',
@@ -616,6 +623,9 @@ const removeTeamFromDb = asyncHandler(async(req,res) => {
     res.status(200).json({message: "Team disqualified"});
 })
 
+
+
+
 const getCreatedAt = asyncHandler( async(req,res) => {
     const data = []
     const teams = await Team.find({});
@@ -647,4 +657,4 @@ const updatePayment = asyncHandler ( async (req,res) => {
 
 
 module.exports = { teamJsonResp, getAllTeams, addTeam, unShortListTeam, updateTeam, deleteTeam, getShortListedTeams,
-     getSingleTeam, exportTeam, shortListTeam, assignProblem, getTeamsPaid, getTeamsUnpaid, removeAssignedProblem, removeTeamFromDb,getCreatedAt,updatePayment};
+     getSingleTeam, exportTeam, shortListTeam, getThadomal, assignProblem, getTeamsPaid, getTeamsUnpaid, removeAssignedProblem, removeTeamFromDb,getCreatedAt,updatePayment};

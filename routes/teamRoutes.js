@@ -1,5 +1,5 @@
 const Router = require('express');
-const {teamJsonResp, addTeam, deleteTeam, getShortListedTeams, fetchAssignedProblems,updateTeam,shortListTeam, removeTeamFromDb, removeAssignedProblem, getSingleTeam,exportTeam, unShortListTeam, assignProblem, getCreatedAt, updatePayment, getTeamsPaid, getTeamsUnpaid} = require('../controllers/teamCntrl');
+const {teamJsonResp, addTeam, deleteTeam, getThadomal,getShortListedTeams, fetchAssignedProblems,updateTeam,shortListTeam, removeTeamFromDb, removeAssignedProblem, getSingleTeam,exportTeam, unShortListTeam, assignProblem, getCreatedAt, updatePayment, getTeamsPaid, getTeamsUnpaid} = require('../controllers/teamCntrl');
 const exportFinalData = require('../controllers/excelCntrl');
 const {User} = require("../models/userModel")
 const {Team} = require("../models/teamModel")

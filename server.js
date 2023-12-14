@@ -35,7 +35,3 @@ app.use('/extra/api', dRoutes)
 app.use(errorHandler);
 
 start();
-
-//16th Aug 
-// Dashboard -Filters
-// Sort problem according to team preference

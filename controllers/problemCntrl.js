@@ -13,14 +13,15 @@ const addProblem = asyncHandler(async (req, res) => {
     const { title, description, keyPoints } = req.body;
     
     try {
-        const newProblem = new Problem({
+        // const newProblem = new Problem({
             
-            title,
-            description,
-            keyPoints
-        });
+        //     title,
+        //     description,
+        //     keyPoints
+        // });
 
-        const savedProblem = await newProblem.save();
+        // const savedProblem = await newProblem.save();
+        const savedProblem = await Problem.insertMany(req.body);
         res.status(201).json(savedProblem);
     } catch (error) {
         res.status(400);

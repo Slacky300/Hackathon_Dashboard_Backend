@@ -17,6 +17,7 @@ const getAllUsers = asyncHandler(async (req, res) => {
             'email': user.email,
             'phoneNo': user.phoneNo,
             "college": user.college,
+            "inTeam": team.name,
             "city": user.city,
             "gender": user.gender,
             "degree": user.degree,
@@ -233,7 +234,9 @@ const getAllColleges = asyncHandler(async (req, res) => {
     }
     const filtere_users = await User.find(filter)
     for(const user of filtere_users){
-        const team = await Team.findById(user.inTeam);
+
+        const usteam = user.inTeam.toString();
+       const team = await Team.findById(usteam);
         users.push({
             'fname': user.fname,
             'lname': user.lname,

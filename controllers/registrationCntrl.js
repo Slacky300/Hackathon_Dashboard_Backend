@@ -110,7 +110,7 @@ const registration = asyncHandler(async (req, res) => {
         }
         
     }
-    await sendVerification(leaderId.email, leaderId.fname)
+    // await sendVerification(leaderId.email, leaderId.fname)
 
     res.status(201).json({ users: insertedUsers, team: newTeam, message: "We have sent a registration confirmation mail to your mail id" });
     }catch(error){
