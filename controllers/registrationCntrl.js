@@ -1,122 +1,149 @@
 const asyncHandler = require('express-async-handler');
-const {User} = require('../models/userModel');
-const {Team} = require('../models/teamModel');
-const {Problem} = require('../models/problemModel');
-const {sendVerification, generateToken} = require('../utils/email')
+const { User } = require('../models/userModel');
+const { Team } = require('../models/teamModel');
+const { Problem } = require('../models/problemModel');
+const { sendVerification } = require('../utils/email');
+const { generateRandomPassword } = require('./userCntrl');
 
-const registration = asyncHandler(async (req, res) => {
-    try{
-        const { usersToAdd, leaderEmail, name, problemPreference } = req.body;
+// Helper functions for validation
+const validateTeamName = (name) => {
+    if (name.length > 30 || name.length < 5) {
+        throw new Error("Team name should be greater than 5 and less than 30 characters");
+    }
+};
 
-    if (!Array.isArray(usersToAdd)) {
-        res.status(400);
+const validateUsers = (users) => {
+    if (!Array.isArray(users)) {
         throw new Error("Invalid user data format");
     }
 
-    if(usersToAdd.length > 4 ){
-        return res.status(400).message("Not more than 4 members can be added");
+    if (users.length > 4) {
+        throw new Error("Not more than 4 members can be added");
     }
 
-    if(usersToAdd.length>=2){
-        for (var i = 0; i <= usersToAdd.length - 2; i++) {
-        
-    
-            // Check for duplicate phone numbers
-            for (var j = i + 1; j < usersToAdd.length; j++) {
-                if (usersToAdd[i].phoneNo == usersToAdd[j].phoneNo) {
-                    return res.status(400).json({ message: "Duplicate phone numbers are not allowed" });
-                }
+    users.forEach((user, i) => {
+        for (let j = i + 1; j < users.length; j++) {
+            if (user.phoneNo === users[j].phoneNo) {
+                throw new Error("Duplicate phone numbers are not allowed");
             }
-        
-            // Check for duplicate emails
-            for (var j = i + 1; j < usersToAdd.length; j++) {
-                if (usersToAdd[i].email == usersToAdd[j].email) {
-                    return res.status(400).json({ message: "Duplicate emails are not allowed" });
-                }
+            if (user.email === users[j].email) {
+                throw new Error("Duplicate emails are not allowed");
             }
         }
-    }
-
-    if(name.length>30 || name.length<5){
-        return res.status(400).json({message: "Team name should be greater than 5 and less than 30"})
-    }
-
-    
-
-    const existing_team_name = await Team.findOne({name: name});
-    if(existing_team_name){
-        res.status(405).json({message: "Team name already exists"})
-    }
-    
-    let k = 0;
-    for(const user of usersToAdd){
-        const user_exists = await User.findOne({email: usersToAdd[k].email});
-        if(user_exists){
-            return res.status(400).json({message: `${usersToAdd[k].email} - Email already exists`})
-        }
-        const phone_exists = await User.findOne({phoneNo: usersToAdd[k].phoneNo});
-        if(phone_exists){
-            return res.status(400).json({message: `${usersToAdd[k].phoneNo} - Phone number already exists`})
-        }
-        k++;
-    }
-
-    const insertedUsers = await User.insertMany(usersToAdd);
-    
-    const leaderId = await User.findOne({ email: leaderEmail });
-    leaderId.isTeamLeader = true;
-    
-    
-    leaderId.inTeam = null; // Clear previous team association
-    const team_members = []
-   
-    await leaderId.save();
-
-    const newTeam = new Team({
-        name,
-        problemPreference,
     });
+};
 
-    newTeam.leader = leaderId;
-    await newTeam.save();
-   
-
-    for (const user of insertedUsers) {
-        newTeam.members.push(user);
+// Function to check if users or team already exist
+const checkExistingUsersAndTeam = async (usersToAdd, teamName) => {
+    for (const user of usersToAdd) {
+        const userExists = await User.findOne({ email: user.email });
+        if (userExists) {
+            throw new Error(`${user.email} - Email already exists`);
+        }
+        const phoneExists = await User.findOne({ phoneNo: user.phoneNo });
+        if (phoneExists) {
+            throw new Error(`${user.phoneNo} - Phone number already exists`);
+        }
     }
-    await newTeam.save();
 
-    for (const user of insertedUsers) {
-        
-        user.inTeam = newTeam._id;
-        await user.save();
+    const existingTeamName = await Team.findOne({ name: teamName });
+    if (existingTeamName) {
+        throw new Error("Team name already exists");
     }
+};
 
-    for (const preference of newTeam.problemPreference) {
+// Function to create a new team
+const createTeam = async (name, leader, problemPreference) => {
+    const newTeam = new Team({ name, leader, problemPreference });
+    await newTeam.save();
+    return newTeam;
+};
+
+// Function to update problems with team preferences
+const updateProblemPreferences = async (team) => {
+    for (const preference of team.problemPreference) {
         const problem = await Problem.findById(preference.problems);
         if (problem) {
             problem.preferences.push({
-                team: newTeam._id,
-                preferenceOrder: preference.preferenceNumber
+                team: team._id,
+                preferenceOrder: preference.preferenceNumber,
             });
             await problem.save();
         }
     }
+};
 
-    for(const user of newTeam.members){
-        const memberTemp = await User.findById(user);
-        if(memberTemp.email !== null){
-            team_members.push(memberTemp.email)
+// Function to send verification email to team members
+const sendVerificationEmails = async (team, leaderId) => {
+    const teamMembers = await Promise.all(
+        team.members.map(async (member) => {
+            const user = await User.findById(member);
+            return user.email;
+        })
+    );
+
+    await sendVerification(leaderId.email, leaderId.fname);
+};
+
+// Main registration handler
+const registration = asyncHandler(async (req, res) => {
+    try {
+        let { usersToAdd, leaderEmail, name, problemPreference } = req.body;
+
+        usersToAdd = usersToAdd.map((user) => {
+            return{
+                ...user,
+                meals:[{
+                    type: "breakfast",
+                },{
+                    type: "lunch",
+                },
+                {
+                    type: "dinner",
+                }],
+                password: generateRandomPassword()
+            }
+        });
+
+        // Validate inputs
+        validateTeamName(name);
+        validateUsers(usersToAdd);
+
+        // Check if users or team already exist
+        await checkExistingUsersAndTeam(usersToAdd, name);
+
+        // Insert users and create a new team
+        const insertedUsers = await User.insertMany(usersToAdd);
+        const leaderId = await User.findOne({ email: leaderEmail });
+        leaderId.isTeamLeader = true;
+        leaderId.inTeam = null;
+        await leaderId.save();
+
+        const newTeam = await createTeam(name, leaderId, problemPreference);
+        newTeam.members.push(...insertedUsers);
+        await newTeam.save();
+
+        // Associate users with the team
+        for (const user of insertedUsers) {
+            user.inTeam = newTeam._id;
+            await user.save();
         }
-        
-    }
-    // await sendVerification(leaderId.email, leaderId.fname)
 
-    res.status(201).json({ users: insertedUsers, team: newTeam, message: "We have sent a registration confirmation mail to your mail id" });
-    }catch(error){
-        console.log(error)
-        res.status(400).json({"message": `Something went wrong!`})
+        // Update problem preferences
+        await updateProblemPreferences(newTeam);
+
+        // Send verification emails
+        // await sendVerificationEmails(newTeam, leaderId);
+
+        res.status(201).json({
+            users: insertedUsers,
+            team: newTeam,
+            message: "Registration confirmation email has been sent",
+        });
+    } catch (error) {
+        console.error(error);
+        res.status(400).json({ message: "Something went wrong!" });
     }
 });
 
-module.exports = {registration};
+module.exports = { registration };

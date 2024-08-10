@@ -6,6 +6,9 @@ const userRoutes = require('./routes/userRoutes');
 const teamRoutes = require('./routes/teamRoutes');
 const prolmRoutes = require('./routes/problRoutes');
 const dRoutes = require('./routes/dRoutes');
+const mealRoutes = require('./routes/mealRoutes');
+const mealRecordRoutes = require('./routes/mealRecordRoutes');
+
 require('dotenv').config();
 const app = express();
 
@@ -31,7 +34,10 @@ const start = async () => {
 app.use('/api/v1/users', userRoutes);
 app.use('/api/v1/teams', teamRoutes);
 app.use('/api/v1/problems', prolmRoutes);
-app.use('/extra/api', dRoutes)
+app.use('/extra/api', dRoutes);
+app.use('/api/v1/meals', mealRoutes);
+app.use('/api/v1/mealRecords', mealRecordRoutes);
+
 app.use(errorHandler);
 
 start();

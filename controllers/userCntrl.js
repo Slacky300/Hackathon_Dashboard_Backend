@@ -2,7 +2,31 @@ const asyncHandler = require('express-async-handler');
 const { User } = require('../models/userModel')
 const { Team } = require('../models/teamModel');
 const { Parser } = require('json2csv');
+const jwt = require('jsonwebtoken');
 
+const loginUser = asyncHandler(async (req, res) => {
+    const {email, password} = req.body;
+
+    const user = await User.findOne({email});
+
+    if(!user){
+        res.status(404);
+        throw new Error("User not found");
+    }
+
+    const isMatch = password === user.password;
+    console.log(user.email, user.fname, user.lname, user.password);
+
+    if(!isMatch){
+        res.status(401);
+        throw new Error("Invalid credentials");
+    }
+
+    const token = jwt.sign({id: user._id}, process.env.ACCESS_TOKEN_, {expiresIn: '30d'});
+
+    res.status(200).json({user, token});
+
+});
 
 
 const getAllUsers = asyncHandler(async (req, res) => {
@@ -303,4 +327,4 @@ const getTeamMembDetails = asyncHandler(async(req,res) => {
   
   
 
-module.exports = { getAllUsers, getTeamMembDetails,getUsersByCollege, addUser, deleteUser, updateUser, getSingleUser, getAllColleges ,userDataToCsv, getUsersByFoodPreference}
+module.exports = { loginUser, getAllUsers, getTeamMembDetails,getUsersByCollege, addUser, deleteUser, updateUser, getSingleUser, getAllColleges ,userDataToCsv, getUsersByFoodPreference}

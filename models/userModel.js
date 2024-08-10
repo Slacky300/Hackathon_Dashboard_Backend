@@ -55,16 +55,19 @@ const UserSchema = mongoose.Schema(
             type: Boolean,
             default: false
         },
-        verificationToken: {
-            type: String,
-            default: null
-        },
         degree:{
             type:String
+        },
+        password:{
+            type: String
         },
         year:{
             type: String,
             enum: ["FE", "SE", "TE", "BE"]
+        },
+        isAdmin:{
+            type: Boolean,
+            default: false
         }
     },
     { timestamps: true }
