@@ -22,7 +22,7 @@ const loginUser = asyncHandler(async (req, res) => {
         throw new Error("Invalid credentials");
     }
 
-    const token = jwt.sign({id: user._id}, process.env.ACCESS_TOKEN_, {expiresIn: '30d'});
+    const token = jwt.sign({id: user._id, isAdmin: user.isAdmin}, process.env.ACCESS_TOKEN_, {expiresIn: '30d'});
 
     res.status(200).json({user, token});
 
@@ -45,7 +45,7 @@ const getAllUsers = asyncHandler(async (req, res) => {
             "city": user.city,
             "gender": user.gender,
             "degree": user.degree,
-            "year": user.year
+            "year": user.year,
         })
     }
     res.status(200).json(users);
@@ -72,7 +72,7 @@ const addUser = asyncHandler(async (req, res) => {
 
     try {
         //check the existing user
-        existingUser = await User.find({ email: email });
+        existingUser = await User.findOne({ email: email });
         if (existingUser) {
             return res.status(400).json({message: "User already exists"});
            

@@ -1,7 +1,7 @@
 const Router = require('express');
 const {getAllUsers, loginUser, addUser, deleteUser, updateUser,getSingleUser,userDataToCsv, getUsersByFoodPreference, getAllColleges, getUsersByCollege} = require('../controllers/userCntrl');
 const {registration} = require('../controllers/registrationCntrl')
-const validateToken = require('../middleware/validateToken')
+const {validateToken} = require('../middleware/validateToken')
 const { generateQR, validateQr } = require('../controllers/foodCntrl');
 
 const router = Router();

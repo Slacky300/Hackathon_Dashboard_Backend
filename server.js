@@ -40,4 +40,9 @@ app.use('/api/v1/mealRecords', mealRecordRoutes);
 
 app.use(errorHandler);
 
+
+
+
 start();
+
+

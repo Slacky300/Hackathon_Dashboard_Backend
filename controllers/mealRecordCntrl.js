@@ -116,5 +116,36 @@ const getUserMealStatistics = asyncHandler(async (req, res) => {
 });
 
 
-module.exports = { createMealRecord, getAvailableMealsForAUser, getMealRecordById, getUserMealStatistics };
+const getDashboardData = asyncHandler(async (req, res) => {
+    const users = await User.find({isAdmin: false}).populate('inTeam');
+    const meals = await Meal.find({});
+
+    const userMeals = await MealRecord.find({}).populate('user').populate('meal');
+    
+    const mealStats = meals.map(meal => {
+        const consumed = userMeals.filter(record => record.meal._id.toString() === meal._id.toString()).length;
+        return {
+            mealName: meal.name,
+            consumed,
+            pending: users.length - consumed
+        };
+    });
+
+    const userMealData = users.map((user, i) => {
+        const userMealRecords = userMeals.filter(record => record.user._id.toString() === user._id.toString());
+        return {
+            email: user.email,
+            team: user.inTeam,
+            meals: userMealRecords.map(record => ({
+                meal: record.meal.name,
+                consumedAt: record.consumedAt
+            }))
+        };
+    });
+
+    res.status(200).json({ mealStats, userMealData });
+});
+
+
+module.exports = { createMealRecord, getAvailableMealsForAUser, getMealRecordById, getDashboardData,getUserMealStatistics };
 
